@@ -151,7 +151,8 @@ troque a ordem. Você pode mudar o texto do título, a largura e a cor.
   O    Entrega                           VOCÊ escolhe: Pendente, Em preparo,
                                          Saiu para entrega, Entregue, Cancelado
   P    Observações do cliente            Cliente
-  Q    Avisar no WhatsApp                Link automático (fórmula)
+  Q    Avisar no WhatsApp                Link automático (texto com link,
+                                         sem fórmula)
   R    E-mail do cliente                 Cliente (opcional)
   S    Último status enviado por e-mail  Automático (evita e-mail repetido)
   T    Reserva de estoque (não editar)   Automático. Ex.: {"P001":2}
@@ -279,7 +280,7 @@ script ignora a repetição.
      calcula o preço e o total, verifica o estoque, monta a reserva. Nada é
      alterado ainda.
   6. Salva o comprovante na pasta do Drive.
-  7. Grava a linha na aba Pedidos, coloca a fórmula do WhatsApp e, se houver
+  7. Grava a linha na aba Pedidos, coloca o link do WhatsApp e, se houver
      aviso, pinta a linha de rosa.
   8. Só então desconta o estoque (assim, se algo falhar antes, nada é descontado).
   9. Limpa o cache da lista de produtos.
@@ -296,8 +297,10 @@ mão (não quando o próprio script grava).
   - Editou a aba Produtos: limpa o cache, então o site já enxerga a mudança.
   - Editou M (pagamento) ou O (entrega) na aba Pedidos:
        1. ajustarEstoquePorStatus: devolve ou reserva estoque (regras da 5.2);
-       2. enviarEmailDaLinha: envia o e-mail do novo status, uma vez por status
+       2. atualizarLinkWhatsApp: refaz o link da coluna Q;
+       3. enviarEmailDaLinha: envia o e-mail do novo status, uma vez por status
           (a coluna S lembra o último status avisado).
+  - Editou nome ou telefone (colunas A a D): só refaz o link do WhatsApp.
 
 O gatilho é criado pelas funções de configuração (6.6). Não há duplicação: elas
 apagam o antigo antes de criar o novo.
@@ -314,9 +317,11 @@ mudança pode levar até 2 minutos para aparecer.
 6.6 FUNÇÕES PARA RODAR MANUALMENTE (uma vez, no editor do Apps Script)
 ----------------------------------------------------------------------
 
-  configurarTudo        Faz as três abaixo. É a única que você precisa rodar.
-  configurarWhatsApp    Cria a coluna Q, os novos status de entrega e preenche a
-                        fórmula em todos os pedidos existentes. Rode de novo se
+  configurarTudo        Faz todas as abaixo (inclusive configurarAvaliacoes). É a
+                        única que você precisa rodar.
+  configurarWhatsApp    Cria a coluna Q, os novos status de entrega e refaz o
+                        link do WhatsApp em todos os pedidos existentes
+                        (substitui qualquer fórmula antiga). Rode de novo se
                         mudar o texto das mensagens de WhatsApp.
   configurarEmail       Cria as colunas R e S e liga o gatilho.
   configurarProdutos    Cria a aba Produtos (com um produto de exemplo, só se a
@@ -336,7 +341,9 @@ não "Nova implantação") para o link não mudar.
                       cachePutBig / cacheGetBig / cacheDropBig
   Estoque             mexerNoEstoque, ajustarEstoquePorStatus
   Status              statusDoPedido
-  WhatsApp            waFormula, configurarWhatsApp
+  WhatsApp            WHATSAPP_TEXTOS, WHATSAPP_ROTULOS, numeroWhatsApp,
+                      linkWhatsApp, linkWhatsAppDaLinha, atualizarLinkWhatsApp,
+                      atualizarTodosLinksWhatsApp, configurarWhatsApp
   E-mail              EMAIL_TEXTOS, montarEmail, enviarEmailStatus,
                       enviarEmailDaLinha, emailValido, htmlSeguro, reais
   Rastreio            rastrear, digitosFone
@@ -374,7 +381,8 @@ As cores e fontes do visual ficam nas variáveis do bloco ":root" do estilo
 7.2 TELAS E FLUXO DO CLIENTE
 ----------------------------
 
-  Vitrine          Título, busca, filtros de categoria, cartões de produto.
+  Vitrine          Título, busca, filtros de categoria, cartões de produto (com
+                   estrelas quando o produto tem avaliação).
   Produto          Página de detalhes (item 7.3).
   Sacola           Painel lateral. Lista os itens, ajusta quantidade, mostra
                    subtotal, entrega e total.
@@ -400,6 +408,9 @@ As cores e fontes do visual ficam nas variáveis do bloco ":root" do estilo
 
 7.3 PÁGINA DO PRODUTO E LINKS
 -----------------------------
+
+Além do #/p/CÓDIGO, existe o #/avaliar/CÓDIGO-DO-PEDIDO (página de avaliar, ver
+seção 8B).
 
 Cada produto tem um link próprio no formato  endereco-do-site/#/p/CÓDIGO
 (ex.: #/p/P001). O botão "Compartilhar este produto" usa o compartilhamento do
@@ -491,9 +502,16 @@ número é o telefone informado pelo cliente, ajustado para o formato do WhatsAp
 (só dígitos, com 55 na frente). Se o cliente informou um número sem WhatsApp, o
 link não vai funcionar.
 
-Os textos ficam dentro da função waFormula. Depois de mudar um texto, rode
-configurarWhatsApp para atualizar as linhas antigas (pedidos novos já usam o
-texto novo).
+O link é gravado pelo próprio script na célula (não é fórmula, então não
+depende de recursos do Google Sheets que variam de conta para conta). Ele se
+atualiza sozinho quando você muda o Status do pagamento, a Entrega, o nome ou o
+telefone do pedido.
+
+Os textos ficam em WHATSAPP_TEXTOS (mensagens; {nome} e {pedido} são preenchidos
+sozinhos) e WHATSAPP_ROTULOS (o que aparece escrito na célula), no início da
+seção do WhatsApp no script. Depois de mudar um texto, publique a nova versão e
+rode configurarWhatsApp para atualizar as linhas antigas (pedidos novos já usam
+o texto novo).
 
 8.3 RASTREIO
 ------------
@@ -506,6 +524,87 @@ errado".
 
 Proteção contra tentativa de adivinhar: depois de 40 consultas erradas em 10
 minutos, o rastreio pausa por alguns minutos (o bloqueio vale para todos).
+
+
+--------------------------------------------------------------------------------
+8B. AVALIAÇÕES VERIFICADAS
+--------------------------------------------------------------------------------
+
+Estado: pronto no script, na planilha e no site.
+
+COMO FUNCIONA
+  1. Você marca o pedido como Entregue. O e-mail e o link de WhatsApp de "Entregue"
+     passam a incluir um convite com o link  SEU-SITE/#/avaliar/CÓDIGO-DO-PEDIDO
+     (só se ENVIAR_CONVITE_AVALIACAO = true e URL_DA_LOJA estiver preenchida).
+  2. O cliente abre o link e confirma o TELEFONE da compra. Vê os produtos do
+     pedido e dá de 1 a 5 estrelas e, se quiser, um comentário (até 600
+     caracteres) para cada um. Confirma o nome que aparece (padrão: "Maria S.") e
+     autoriza a exibição. Não há fotos.
+  3. Cada avaliação cai na aba "Avaliações" como Pendente (linha amarela) e você
+     recebe um e-mail (NOTIFY_EMAIL).
+  4. Você muda o Status para Aprovada ou Recusada. Se quiser, escreve uma
+     Resposta da loja, que aparece embaixo da avaliação. Aprovada aparece no site
+     na hora.
+
+ABA "AVALIAÇÕES"  (criada pelo configurarTudo; o script usa a POSIÇÃO das colunas)
+  A Recebida em   B Pedido   C Código do produto   D Produto   E Nota (1 a 5)
+  F Comentário    G Nome exibido   H Status   I Resposta da loja
+  Você mexe só em H (Pendente / Aprovada / Recusada) e I. Não edite o texto do
+  cliente. Linha amarela = pendente, cinza = recusada, sem cor = aprovada.
+
+REGRAS
+  - Só pedido com Entrega = Entregue pode avaliar, e só produtos que estavam no
+    pedido. Pedidos sem reserva de estoque (feitos pelo site antigo) não avaliam.
+  - Uma avaliação por produto por pedido. Para deixar o cliente refazer, apague a
+    linha dele na aba.
+  - Tudo ou nada: se um item do envio for inválido, nenhum é gravado.
+  - Recuse só conteúdo ofensivo, que não fale do produto ou que exponha dados
+    pessoais. Nota baixa não é motivo para recusar.
+  - O que vai para o site é só: nome exibido, nota, comentário, data e resposta.
+    Nunca código do pedido, telefone, e-mail ou endereço.
+  - A verificação usa o mesmo mecanismo do rastreio (código + telefone, com o
+    mesmo limite de tentativas erradas).
+  - Não ofereça desconto ou brinde em troca de avaliação, nem apague só as ruins.
+
+ENDEREÇOS NOVOS DO SCRIPT
+  GET  ?action=avaliacoes               Média e total por produto (para as estrelas)
+  GET  ?action=avaliacoes&produto=P001  Resumo e lista de avaliações do produto
+  POST {action:"avaliar_info", code, phone}
+       Devolve os produtos do pedido e quais já foram avaliados.
+  POST {action:"avaliar", code, phone, autorizo:true,
+        avaliacoes:[{produto, nota, comentario, nome}]}
+       Grava como Pendente.
+
+CONSTANTES NOVAS NO SCRIPT
+  ENVIAR_CONVITE_AVALIACAO   false por padrão. Troque para true quando a página de
+                             avaliação estiver no ar no site.
+  SHEET_AVALIACOES           Nome da aba ("Avaliações").
+
+FUNÇÕES NOVAS
+  configurarAvaliacoes (o configurarTudo já chama), infoAvaliacao,
+  registrarAvaliacao, listarAvaliacoes, montarAvaliacoesPublicas, localizarPedido
+  (verificação compartilhada com o rastreio), linkAvaliacao, nomeExibido.
+
+NO SITE
+  - Vitrine e página do produto: estrelas com a média e o total, ex.: "4,5 (2)".
+    Produto sem avaliação não mostra estrelas (nem vazias). As notas vêm de
+    GET ?action=avaliacoes, carregado depois dos produtos.
+  - Página do produto: seção "Avaliações de clientes" com a média, as avaliações
+    mais recentes primeiro (5 de início, botão "Ver mais avaliações"), a etiqueta
+    "Compra verificada" e a resposta da loja. Clicar nas estrelas leva até ela.
+    Texto do cliente é sempre exibido como texto (nunca como HTML).
+  - Página de avaliar (#/avaliar/CÓDIGO): o cliente confirma o telefone, dá as
+    estrelas por produto, escreve um comentário opcional, confere o nome e
+    autoriza a exibição. Produtos já avaliados aparecem como avaliados. Pedido
+    ainda não entregue mostra um aviso. Teclado e leitor de tela funcionam (as
+    estrelas são um grupo de opções com legenda).
+  - Rastreio: quando o pedido está Entregue, aparece o botão "Avaliar meu pedido".
+  - Modo de teste (sem link do script): aparecem avaliações e um fluxo de
+    demonstração, sem enviar nada.
+
+PARA LIGAR O CONVITE (depois que o site novo estiver no ar)
+  No script: URL_DA_LOJA preenchida e ENVIAR_CONVITE_AVALIACAO = true. Nova versão.
+  A partir daí, o e-mail e o WhatsApp de "Entregue" levam o link de avaliação.
 
 
 --------------------------------------------------------------------------------
@@ -580,7 +679,7 @@ O que vale saber:
 --------------------------------------------------------------------------------
 
   Trocar textos dos e-mails       Script: EMAIL_TEXTOS. Nova versão.
-  Trocar textos do WhatsApp       Script: waFormula. Nova versão + rodar
+  Trocar textos do WhatsApp       Script: WHATSAPP_TEXTOS. Nova versão + rodar
                                   configurarWhatsApp.
   Mudar a taxa de entrega         Script: TAXA_DE_ENTREGA. Nova versão. (O site
                                   passa a mostrar o valor sozinho.)
@@ -597,7 +696,7 @@ O que vale saber:
   Adicionar um STATUS novo (mais trabalhoso; precisa alterar em 5 lugares):
     1. Script: DELIVERY_STATUSES e a lista de validação (configurarWhatsApp);
     2. Script: statusDoPedido;
-    3. Script: waFormula (mensagem de WhatsApp);
+    3. Script: WHATSAPP_TEXTOS e WHATSAPP_ROTULOS (mensagem de WhatsApp);
     4. Script: EMAIL_TEXTOS;
     5. Site: TRACK_STEPS (etapa na linha do tempo do rastreio).
 
@@ -659,8 +758,9 @@ O que vale saber:
        tinha sido avisado antes (coluna S); cota diária; ou caiu no spam. Se o
        gatilho sumiu, rode configurarEmail de novo.
 
-  Link do WhatsApp mostra erro na célula
-    -> Rode configurarWhatsApp. Confira o telefone da linha (coluna D).
+  Link do WhatsApp aparece em branco, com erro ou "#ERROR!"
+    -> Rode configurarWhatsApp (troca qualquer fórmula antiga por um link
+       novo). Se a célula ficar vazia, o pedido está sem telefone (coluna D).
 
   O estoque não voltou ao cancelar
     -> O pedido não tinha reserva (pedido de teste antigo, pedido do site antigo
@@ -669,6 +769,21 @@ O que vale saber:
   "Um dos produtos não está mais disponível" ao pedir
     -> O produto foi desativado ou o código mudou entre a escolha e o envio. Se o
        cliente já pagou, combine a devolução ou a troca.
+
+  Avaliação não aparece no site depois de aprovada
+    -> Confira se o Status (coluna H) está "Aprovada" e se o nome do produto/código
+       (coluna C) é o mesmo da aba Produtos. Aparece em segundos; se você mudou por
+       importação, pode levar até 2 minutos.
+
+  Cliente diz que não consegue avaliar
+    -> O pedido precisa estar com Entrega = Entregue, e ele precisa usar o mesmo
+       telefone da compra. Pedidos do site antigo não avaliam. Se ele já avaliou
+       o produto, para refazer apague a linha dele na aba Avaliações.
+
+  O convite de avaliação não vai no e-mail/WhatsApp de "Entregue"
+    -> ENVIAR_CONVITE_AVALIACAO precisa estar true e URL_DA_LOJA preenchida; a
+       nova versão do script precisa estar publicada. O e-mail só sai uma vez por
+       status: para testar, use um pedido novo.
 
   Cliente diz que o rastreio não acha o pedido
     -> Confira se ele digitou o mesmo telefone da compra e o código exatamente
@@ -746,4 +861,5 @@ O que vale saber:
 
 ================================================================================
 Fim da documentação
+================================================================================
 ================================================================================
