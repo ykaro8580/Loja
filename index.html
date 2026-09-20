@@ -216,6 +216,32 @@ input[name=code]{text-transform:uppercase;letter-spacing:.04em}
 .related{margin-top:44px}
 .related h2{font-size:1.25rem;letter-spacing:-.01em;margin-bottom:12px}
 .related .grid{padding-bottom:0}
+.stars{position:relative;display:inline-block;white-space:nowrap;font-size:1rem;line-height:1;letter-spacing:1px;vertical-align:middle}
+.stars-bg{color:#E3D3D8}
+.stars-fg{position:absolute;left:0;top:0;overflow:hidden;white-space:nowrap;color:#E29A00}
+.rate{display:flex;align-items:center;gap:6px;min-height:1.3em}
+.pdp-rate{margin:8px 0 0}
+.rate-link{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);font-weight:500}
+.rate-link:hover .rate-n{text-decoration:underline}
+.rev-sum{display:flex;align-items:center;gap:14px;margin:6px 0 14px}
+.rev-big{font:700 2.6rem/1 var(--display);letter-spacing:-.02em}
+.rev-item{padding:16px 0;border-top:1px solid var(--line);max-width:62ch}
+.rev-head{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.rev-item p{margin:8px 0 0}
+.tag-ok{background:#E3F1E7;color:#1E5B33;font-size:.75rem;font-weight:600;padding:2px 9px;border-radius:999px}
+.rev-reply{margin:10px 0 0;padding:10px 14px;background:var(--blush);border-radius:12px;font-size:.92rem}
+.rev-reply p{margin:2px 0 0}
+.rev-wrap{max-width:640px}
+.rev-prod{border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin:0 0 16px;background:var(--surface)}
+.rev-prod legend{font-weight:600;padding:0 6px}
+.starrow{display:flex;align-items:center;flex-wrap:wrap;gap:4px 12px;margin:2px 0 10px}
+.starpick{position:relative;display:flex;gap:2px}
+.starpick input{position:absolute;opacity:0;width:1px;height:1px}
+.starpick label{font-size:2rem;line-height:1;padding:4px;cursor:pointer;color:#E3D3D8}
+.starpick label.on{color:#E29A00}
+.starpick input:focus-visible + label{outline:3px solid var(--ink);outline-offset:2px;border-radius:8px}
+.check{display:flex;gap:10px;align-items:flex-start;margin:6px 0 14px;font-size:.95rem}
+.check input{width:22px;height:22px;flex:none;margin-top:1px;accent-color:var(--berry)}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;z-index:60;font-size:.92rem;opacity:0;pointer-events:none;transition:opacity .2s}
 .toast.show{opacity:1}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
@@ -267,6 +293,7 @@ input[name=code]{text-transform:uppercase;letter-spacing:.04em}
   </section>
 
   <section id="pdp" aria-label="Detalhes do produto" hidden></section>
+  <section id="rev" aria-label="Avaliar pedido" hidden></section>
 </main>
 
 <footer class="foot" id="pagefoot">
@@ -281,7 +308,7 @@ input[name=code]{text-transform:uppercase;letter-spacing:.04em}
     </div>
     <div>
       <h2>Seus dados</h2>
-      <p>Usamos nome, telefone, endereço e e-mail (se você informar) só para entregar e avisar sobre o seu pedido. Não compartilhamos com terceiros.</p>
+      <p>Usamos nome, telefone, endereço e e-mail (se você informar) só para entregar e avisar sobre o seu pedido. Não compartilhamos com terceiros. Se você avaliar um produto, mostramos apenas seu primeiro nome e a inicial do sobrenome.</p>
       <p id="contactLine"></p>
     </div>
   </div>
@@ -353,6 +380,13 @@ const SAMPLE_PRODUCTS = [
   { id:"P006", name:"Esponja para Maquiagem Ruby Rose Midnight", brand:"Ruby Rose", category:"Maquiagem", price:39.00, oldPrice:0, stock:0, featured:false, photos:[], desc:"", details:[] }
 ];
 
+/* Avaliações de exemplo (só no modo de teste) */
+const SAMPLE_RATINGS = { P001:{media:4.5,total:2} };
+const SAMPLE_REVIEWS = { P001:[
+  { nome:"Ana P.", nota:5, comentario:"Chegou rápido e o cheiro é ótimo. Deixou a pele bem macia.", data:"2026-09-12T15:00:00.000Z", resposta:"Obrigada, Ana! Que bom que gostou." },
+  { nome:"Joana M.", nota:4, comentario:"", data:"2026-09-10T15:00:00.000Z", resposta:"" }
+] };
+
 /* =====================================================================
    A partir daqui é o funcionamento da loja
    ===================================================================== */
@@ -389,7 +423,8 @@ const state = {
   code: "", receipt: null, sending: false, checking: false, error: "", notice: "", opener: null,
   track: {code:"",phone:"",loading:false,error:"",result:null},
   loaded: false, loadError: false, testMode: false, fee: CONFIG.deliveryFee,
-  route: {type:"shop"}, routed: false, shopScroll: 0, cameFromShop: false
+  route: {type:"shop"}, routed: false, shopScroll: 0, cameFromShop: false,
+  ratings: {}, prodReviews: {}, revShown: {}, review: null
 };
 if(!state.cart || typeof state.cart!=="object") state.cart={};
 
@@ -537,6 +572,7 @@ function cardHtml(p,o){
       <h3>${esc(p.name)}</h3>
     </a>
     <div class="info">
+      ${ratingLine(p.id)}
       <div class="price">${priceHtml(p)}</div>
       <div class="stock">${st}</div>
       <div class="buy">${buy?buyControl(p):`<a class="btn btn-quiet btn-block" href="${href}">Ver produto</a>`}</div>
@@ -616,6 +652,7 @@ function renderProduct(id){
         <p class="muted small crumb">${esc(p.category)}</p>
         <h1 class="pdp-title" id="pdpTitle" tabindex="-1">${esc(p.name)}</h1>
         ${p.brand?`<p class="muted" style="margin:6px 0 0">Marca: ${esc(p.brand)}</p>`:""}
+        <div id="pdpRate">${pdpRating(p.id)}</div>
         <div class="pdp-price"><span class="price">${priceHtml(p)}</span>${off>=1?`<span class="tag">${off}% off</span>`:""}</div>
         <p class="stock-line${low?" low":""}">${p.stock<=0?"Esgotado":(stockLabel(p,5)||"Em estoque")}</p>
         <div class="pdp-buy" id="pdpBuy">${buyControl(p)}</div>
@@ -626,7 +663,7 @@ function renderProduct(id){
         </ul>
       </div>
     </div>
-    ${desc}${det}${related}
+    ${desc}${det}<section class="pdp-sec" id="pdpReviews" hidden></section>${related}
   </div>`;
 }
 function galleryIndex(){ const s=$("#slides"); return s&&s.clientWidth?Math.round(s.scrollLeft/s.clientWidth):0; }
@@ -656,25 +693,207 @@ async function shareProduct(id){
   toast(await copyText(url)?"Link do produto copiado":"Não foi possível copiar o link");
 }
 
-/* ---------- Navegação entre a vitrine e a página do produto (#/p/CÓDIGO) ---------- */
+/* ---------- Avaliações verificadas ---------- */
+const fmt1 = n => Number(n).toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1});
+function starsHtml(media){
+  const pct=Math.max(0,Math.min(100,Number(media)/5*100));
+  return `<span class="stars" role="img" aria-label="Nota ${fmt1(media)} de 5"><span class="stars-bg" aria-hidden="true">★★★★★</span><span class="stars-fg" aria-hidden="true" style="width:${pct}%">★★★★★</span></span>`;
+}
+/* Produto sem avaliação não mostra estrelas (nem vazias) */
+function ratingLine(id){
+  const r=state.ratings[id];
+  if(!r||!r.total) return `<div class="rate"></div>`;
+  return `<div class="rate">${starsHtml(r.media)}<span class="muted small">${fmt1(r.media)} (${r.total})</span></div>`;
+}
+function pdpRating(id){
+  const r=state.ratings[id]; if(!r||!r.total) return "";
+  return `<p class="pdp-rate"><button type="button" class="link-btn rate-link" data-act="goto-reviews">${starsHtml(r.media)}<span class="rate-n">${fmt1(r.media)} (${r.total} ${r.total===1?"avaliação":"avaliações"})</span></button></p>`;
+}
+function apiUrl(q){ return CONFIG.appsScriptUrl+(CONFIG.appsScriptUrl.includes("?")?"&":"?")+q; }
+async function loadRatings(){
+  if(!CONFIG.appsScriptUrl){ state.ratings=SAMPLE_RATINGS; return; }
+  try{
+    const j=await (await fetch(apiUrl("action=avaliacoes"))).json();
+    state.ratings=(j&&j.ok&&j.resumo&&typeof j.resumo==="object")?j.resumo:{};
+  }catch(err){ state.ratings={}; }
+}
+function refreshRatings(){
+  if(state.route.type==="shop") renderGrid();
+  else if(state.route.type==="product"){ const e=$("#pdpRate"); if(e) e.innerHTML=pdpRating(state.route.id); paintReviews(state.route.id); }
+}
+function reviewItem(a){
+  const d=new Date(a.data), data=isNaN(d)?"":d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"});
+  return `<article class="rev-item">
+    <div class="rev-head">${starsHtml(a.nota)}<strong>${esc(a.nome)}</strong><span class="tag-ok">Compra verificada</span>${data?`<span class="muted small">${data}</span>`:""}</div>
+    ${a.comentario?`<p>${esc(a.comentario)}</p>`:""}
+    ${a.resposta?`<div class="rev-reply"><strong>Resposta da loja</strong><p>${esc(a.resposta)}</p></div>`:""}
+  </article>`;
+}
+function reviewsSection(id){
+  const d=state.prodReviews[id], r=state.ratings[id];
+  if(d&&Array.isArray(d.avaliacoes)&&d.avaliacoes.length){
+    const shown=state.revShown[id]||5, res=d.resumo&&d.resumo.total?d.resumo:{media:d.avaliacoes.reduce((s,a)=>s+a.nota,0)/d.avaliacoes.length,total:d.avaliacoes.length};
+    return `<h2>Avaliações de clientes</h2>
+      <div class="rev-sum"><span class="rev-big">${fmt1(res.media)}</span><div>${starsHtml(res.media)}<div class="muted small">${res.total} ${res.total===1?"avaliação":"avaliações"} de clientes que receberam o pedido</div></div></div>
+      ${d.avaliacoes.slice(0,shown).map(reviewItem).join("")}
+      ${d.avaliacoes.length>shown?`<button type="button" class="btn btn-quiet" data-act="more-reviews" data-id="${esc(id)}">Ver mais avaliações</button>`:""}`;
+  }
+  if(d&&d.loading&&r&&r.total>0) return `<h2>Avaliações de clientes</h2><p class="muted">Carregando avaliações…</p>`;
+  return "";
+}
+function paintReviews(id){
+  const el=$("#pdpReviews"); if(!el||state.route.type!=="product"||state.route.id!==id) return;
+  const html=reviewsSection(id); el.innerHTML=html; el.hidden=!html;
+}
+async function loadProductReviews(id){
+  const cur=state.prodReviews[id];
+  if(cur&&(cur.loading||cur.avaliacoes)) return;
+  state.prodReviews[id]={loading:true}; paintReviews(id);
+  try{
+    if(!CONFIG.appsScriptUrl) state.prodReviews[id]={resumo:state.ratings[id]||{media:0,total:0},avaliacoes:SAMPLE_REVIEWS[id]||[]};
+    else{
+      const j=await (await fetch(apiUrl("action=avaliacoes&produto="+encodeURIComponent(id)))).json();
+      if(!j||!j.ok||!Array.isArray(j.avaliacoes)) throw new Error("resposta inesperada");
+      state.prodReviews[id]={resumo:j.resumo||{media:0,total:0},avaliacoes:j.avaliacoes};
+    }
+  }catch(err){ delete state.prodReviews[id]; }
+  paintReviews(id);
+}
+function showReviews(id){ if(!byId(id)) return; paintReviews(id); loadProductReviews(id); }
+
+/* ---------- Página de avaliar (#/avaliar/CÓDIGO) ---------- */
+async function apiPost(payload){
+  if(!CONFIG.appsScriptUrl){                       /* modo de teste: respostas de exemplo */
+    if(payload.action==="avaliar_info") return {ok:true,codigo:payload.code,nome:"Maria S.",itens:[
+      {id:"P001",nome:SAMPLE_PRODUCTS[0].name,jaAvaliado:false},{id:"P002",nome:SAMPLE_PRODUCTS[1].name,jaAvaliado:false}]};
+    console.log("Modo de teste — avaliação que seria enviada:",payload);
+    return {ok:true,enviadas:payload.avaliacoes.length,jaAvaliados:[]};
+  }
+  const r=await fetch(CONFIG.appsScriptUrl,{method:"POST",body:JSON.stringify(payload)});
+  return await r.json();
+}
+function startReview(code){
+  const c=String(code||"").toUpperCase();
+  if(!state.review||state.review.code!==c||state.review.step==="done"){
+    state.review={code:c,phone:state.form.phone||"",step:"phone",info:null,error:"",loading:false,result:null};
+  }
+  renderReview();
+}
+function renderReview(){
+  const r=state.review, box=$("#rev");
+  document.title=`Avaliar pedido | ${BASE_TITLE}`;
+  const back=`<a class="back" href="#/" data-act="back-shop">${CHEV_L} Voltar à loja</a>`;
+  const test=!CONFIG.appsScriptUrl?`<div class="notice">Modo de teste: os dados desta página são de exemplo e nada será enviado.</div>`:"";
+  let inner="";
+  if(r.step==="phone"){
+    inner=`<h1 class="pdp-title" id="revTitle" tabindex="-1">Avaliar meu pedido</h1>
+      <p class="muted">Conte como foi a sua compra. Para confirmar que o pedido é seu, digite o código e o telefone usados na compra.</p>
+      <form id="revLookup" novalidate>
+        <label class="field">Código do pedido
+          <input name="code" required autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="CS260919AB12" value="${esc(r.code)}"></label>
+        <label class="field">Telefone com DDD
+          <input name="phone" type="tel" inputmode="tel" autocomplete="tel" value="${esc(r.phone)}"></label>
+        ${r.error?`<div class="error" role="alert">${esc(r.error)}</div>`:""}
+        <button class="btn btn-primary" type="submit" ${r.loading?"disabled":""}>${r.loading?"Conferindo…":"Continuar"}</button>
+      </form>`;
+  }else if(r.step==="form"){
+    const itens=r.info.itens, faltam=itens.filter(i=>!i.jaAvaliado);
+    inner=`<h1 class="pdp-title" id="revTitle" tabindex="-1">Avaliar meu pedido</h1>
+      <p class="muted">Pedido ${esc(r.info.codigo)}. Dê de 1 a 5 estrelas para os produtos que quiser avaliar. O comentário é opcional.</p>`+
+      (faltam.length?`<form id="revForm" novalidate>
+        ${itens.map((it,i)=>it.jaAvaliado
+          ?`<fieldset class="rev-prod"><legend>${esc(it.nome)}</legend><p class="muted" style="margin:0">Você já avaliou este produto. Obrigado!</p></fieldset>`
+          :`<fieldset class="rev-prod"><legend>${esc(it.nome)}</legend>
+            <div class="starrow"><div class="starpick" role="radiogroup" aria-label="Nota para ${esc(it.nome)}">
+              ${[1,2,3,4,5].map(n=>`<input type="radio" id="s${i}-${n}" name="nota-${i}" value="${n}"><label for="s${i}-${n}"><span class="sr-only">${n} ${n===1?"estrela":"estrelas"}</span><span aria-hidden="true">★</span></label>`).join("")}
+            </div><span class="starval muted small" aria-live="polite"></span></div>
+            <label class="field" style="margin-bottom:0">Comentário <small>(opcional, até 600 caracteres)</small>
+              <textarea name="txt-${i}" maxlength="600"></textarea></label>
+          </fieldset>`).join("")}
+        <label class="field">Como seu nome vai aparecer
+          <input name="nome" maxlength="30" autocomplete="off" value="${esc(r.info.nome||"")}"></label>
+        <label class="check"><input type="checkbox" name="autorizo"><span>Autorizo mostrar minha avaliação no site, com esse nome.</span></label>
+        <div id="revMsg" role="alert"></div>
+        <button class="btn btn-primary" type="submit" id="revSend">Enviar avaliação</button>
+      </form>`:`<p>Você já avaliou todos os produtos deste pedido. Obrigado!</p><a class="btn btn-primary" href="#/" data-act="back-shop">Voltar à loja</a>`);
+  }else{
+    const n=(r.result&&r.result.enviadas)||0;
+    inner=`<div class="done"><div class="ok"><svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#2B1B2A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <h1 class="pdp-title" id="revTitle" tabindex="-1" style="font-size:1.6rem">Obrigado pela avaliação!</h1>
+      <p class="muted">${n===1?"Recebemos a sua avaliação":"Recebemos as suas avaliações"}. Ela aparece no site depois que a gente conferir.</p>
+      <a class="btn btn-primary" href="#/" data-act="back-shop">Voltar à loja</a></div>`;
+  }
+  box.innerHTML=`<div class="wrap pdp rev-wrap">${back}${test}${inner}</div>`;
+}
+async function lookupReview(code,phone){
+  const r=state.review;
+  Object.assign(r,{code:code.toUpperCase(),phone,error:""});
+  if(!r.code||phone.replace(/\D/g,"").length<10){ r.error="Informe o código do pedido e o telefone com DDD."; renderReview(); return; }
+  r.loading=true; renderReview();
+  try{
+    const j=await apiPost({action:"avaliar_info",code:r.code,phone});
+    if(!j||!j.ok) throw Object.assign(new Error((j&&j.error)||"Não foi possível abrir a avaliação."),{known:true});
+    r.info=j; r.step="form";
+  }catch(err){ r.error=err.known?err.message:"Não foi possível consultar agora. Confira sua conexão e tente de novo."; }
+  r.loading=false; renderReview();
+  const t=$("#revTitle"); if(t&&r.step==="form") t.focus({preventScroll:true});
+}
+async function sendReview(form){
+  const r=state.review, msg=$("#revMsg"), btn=$("#revSend"), d=new FormData(form);
+  const fail=t=>{ msg.innerHTML=`<div class="error">${esc(t)}</div>`; };
+  const avals=[];
+  r.info.itens.forEach((it,i)=>{
+    if(it.jaAvaliado) return;
+    const nota=Number(d.get("nota-"+i));
+    if(nota>=1&&nota<=5) avals.push({produto:it.id,nota,comentario:String(d.get("txt-"+i)||"").trim()});
+  });
+  if(!avals.length){ fail("Escolha de 1 a 5 estrelas em pelo menos um produto."); return; }
+  if(!d.get("autorizo")){ fail("Marque a autorização para mostrarmos a sua avaliação."); return; }
+  const nome=String(d.get("nome")||"").trim();
+  avals.forEach(a=>a.nome=nome);
+  btn.disabled=true; btn.textContent="Enviando…"; msg.innerHTML="";
+  try{
+    const j=await apiPost({action:"avaliar",code:r.code,phone:r.phone,autorizo:true,avaliacoes:avals});
+    if(!j||!j.ok) throw Object.assign(new Error((j&&j.error)||"Não foi possível enviar a avaliação."),{known:true});
+    r.result=j; r.step="done"; renderReview();
+    const t=$("#revTitle"); if(t) t.focus({preventScroll:true});
+    window.scrollTo(0,0);
+  }catch(err){
+    fail(err.known?err.message:"Não foi possível enviar agora. Confira sua conexão e tente de novo. Suas respostas continuam na tela.");
+    btn.disabled=false; btn.textContent="Enviar avaliação";
+  }
+}
+function paintStars(group){
+  const v=Number((group.querySelector("input:checked")||{}).value||0);
+  group.querySelectorAll("label").forEach((l,i)=>l.classList.toggle("on",i<v));
+  const out=group.parentElement.querySelector(".starval"); if(out) out.textContent=v?`${v} de 5`:"";
+}
+
+/* ---------- Navegação entre a vitrine, a página do produto (#/p/CÓDIGO) e a de avaliar (#/avaliar/CÓDIGO) ---------- */
 function applyRoute(){
   const prev=state.route;
   if(prev.type==="shop") state.shopScroll=window.scrollY;      /* guarda antes de esconder a vitrine */
-  const m=location.hash.match(/^#\/p\/(.+)$/);
-  const r=m?{type:"product",id:decodeURIComponent(m[1])}:{type:"shop"};
+  const hs=location.hash;
+  const m=hs.match(/^#\/p\/(.+)$/), a=hs.match(/^#\/avaliar\/?(.*)$/);
+  const r=m?{type:"product",id:decodeURIComponent(m[1])}:a?{type:"review",code:decodeURIComponent(a[1]||"")}:{type:"shop"};
   state.route=r;
-  const isP=r.type==="product";
-  $("#heroSec").hidden=isP; $("#shop").hidden=isP; $("#pdp").hidden=!isP;
-  if(isP){
+  $("#heroSec").hidden=r.type!=="shop"; $("#shop").hidden=r.type!=="shop";
+  $("#pdp").hidden=r.type!=="product"; $("#rev").hidden=r.type!=="review";
+  if(r.type==="product"){
     state.cameFromShop=prev.type==="shop"&&state.routed;
-    renderProduct(r.id); bindGallery();
+    renderProduct(r.id); bindGallery(); showReviews(r.id);
     window.scrollTo(0,0);
     const h=$("#pdpTitle"); if(h) h.focus({preventScroll:true});
+  }else if(r.type==="review"){
+    state.cameFromShop=false;
+    startReview(r.code);
+    window.scrollTo(0,0);
+    const t=$("#revTitle"); if(t) t.focus({preventScroll:true});
   }else{
     document.title=BASE_TITLE;
     renderGrid();
     window.scrollTo(0,prev.type==="product"?state.shopScroll:0);
-    if(prev.type==="product"){ const a=document.querySelector(`[data-pid="${CSS.escape(prev.id)}"]`); if(a) a.focus({preventScroll:true}); }
+    if(prev.type==="product"){ const el=document.querySelector(`[data-pid="${CSS.escape(prev.id)}"]`); if(el) el.focus({preventScroll:true}); }
   }
   state.routed=true;
 }
@@ -1001,6 +1220,7 @@ function trackViews(){
     body:`${t.error?`<div class="error" role="alert" style="margin-bottom:12px">${esc(t.error)}</div>`:""}
       <h3 id="trackResult" class="track-title" tabindex="-1">Pedido ${esc(r.codigo)}</h3>${date}
       ${status}
+      ${r.status==="entregue"?`<a class="btn btn-primary btn-block" style="margin-top:14px" href="#/avaliar/${encodeURIComponent(r.codigo)}" data-act="go-review" data-code="${esc(r.codigo)}">Avaliar meu pedido</a>`:""}
       <h3 class="sec-title">Itens do pedido</h3>
       <ul class="items">${items}</ul>
       <div class="row"><span>Total</span><strong>${brl(r.total)}</strong></div>`,
@@ -1049,6 +1269,9 @@ document.addEventListener("click",async e=>{
     case "gal-next": galleryGo(galleryIndex()+1); break;
     case "gal-go": galleryGo(Number(el.dataset.i)); break;
     case "share": shareProduct(id); break;
+    case "goto-reviews": { const el=$("#pdpReviews"); if(el&&!el.hidden) el.scrollIntoView({behavior:reduceMotion?"auto":"smooth",block:"start"}); break; }
+    case "more-reviews": state.revShown[id]=(state.revShown[id]||5)+10; paintReviews(id); break;
+    case "go-review": e.preventDefault(); closePanel(); location.hash="#/avaliar/"+encodeURIComponent(el.dataset.code); break;
     case "back-shop": e.preventDefault(); if(state.cameFromShop) history.back(); else location.hash="#/"; break;
     case "open-track": {
       const last=read("cs_last",{});
@@ -1089,6 +1312,18 @@ document.addEventListener("submit",e=>{
   checkBeforePayment().then(ok=>{ if(ok) go("payment"); });
 });
 document.addEventListener("change",e=>{
+  const g=e.target.closest&&e.target.closest(".starpick"); if(g) paintStars(g);
+});
+document.addEventListener("submit",e=>{
+  if(e.target.id==="revLookup"){
+    e.preventDefault();
+    const d=Object.fromEntries(new FormData(e.target).entries());
+    lookupReview(String(d.code||"").trim(),String(d.phone||"").trim());
+  }else if(e.target.id==="revForm"){
+    e.preventDefault(); sendReview(e.target);
+  }
+});
+document.addEventListener("change",e=>{
   if(e.target.id==="receipt" && e.target.files[0]) handleReceipt(e.target.files[0]);
 });
 $("#q").addEventListener("input",e=>{ state.q=e.target.value; renderGrid(); });
@@ -1103,8 +1338,9 @@ async function afterLoad(ok){
   state.loadError=!ok;
   if(ok){ const notes=reconcileCart(null); if(notes.length) toast("Atualizamos sua sacola: alguns itens mudaram."); }
   renderChips(); updateCount(); updateDeliveryTexts(); renderShopNote();
-  if(state.route.type==="product"){ renderProduct(state.route.id); bindGallery(); const h=$("#pdpTitle"); if(h) h.focus({preventScroll:true}); }
-  else renderGrid();
+  if(state.route.type==="product"){ renderProduct(state.route.id); bindGallery(); showReviews(state.route.id); const h=$("#pdpTitle"); if(h) h.focus({preventScroll:true}); }
+  else if(state.route.type==="shop") renderGrid();
+  if(ok) loadRatings().then(refreshRatings);
 }
 async function boot(){
   renderChips(); renderGrid(); updateCount(); applyRoute();
