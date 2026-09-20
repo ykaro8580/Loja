@@ -1,0 +1,1116 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Casa de Sensações</title>
+<meta name="description" content="Maquiagem e cuidados com a pele com entrega na cidade. Pague por Pix.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Casa de Sensações">
+<meta property="og:description" content="Maquiagem e cuidados com a pele com entrega na cidade. Pague por Pix.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FCF4F5; --surface:#FFFFFF; --ink:#2B1B2A; --muted:#6F5C69; --line:#EBD8DD;
+  --berry:#A81F4B; --berry-dark:#8A173D; --honey:#F2B632; --blush:#F7DDE2;
+  --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.55 var(--body);-webkit-text-size-adjust:100%}
+img{max-width:100%;display:block}
+button,input,textarea{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--display);margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(16px,4vw,32px)}
+.muted{color:var(--muted)}
+.small{font-size:.875rem}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+
+/* Cabeçalho */
+.top{position:sticky;top:0;z-index:20;background:rgba(252,244,245,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font:700 1.15rem/1 var(--display);letter-spacing:-.01em;text-decoration:none;color:var(--ink)}
+.brand svg{width:30px;height:22px;flex:none}
+.cart-btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-weight:600;cursor:pointer}
+.cart-btn:hover{border-color:var(--ink)}
+.badge{min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:var(--berry);color:#fff;font-size:.8rem;display:inline-grid;place-items:center}
+.badge[data-zero="true"]{background:var(--line);color:var(--muted)}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;padding:104px 0 32px}
+.roof{position:absolute;left:0;top:0;width:100%;height:120px}
+.roof polyline{fill:none;stroke:var(--honey);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.hero h1{font-size:clamp(2.3rem,6.4vw,4.2rem);line-height:1.02;letter-spacing:-.025em;max-width:13ch;font-weight:700}
+.hero p{max-width:46ch;margin:14px 0 0;color:var(--muted);font-size:1.05rem}
+.perks{display:flex;flex-wrap:wrap;gap:8px 22px;margin:20px 0 0;padding:0;list-style:none;font-weight:500}
+.perks li{display:flex;align-items:center;gap:8px}
+.perks li::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--honey)}
+
+/* Barra de filtros */
+.toolbar{display:flex;flex-wrap:wrap;gap:12px 16px;align-items:center;padding:8px 0 20px}
+.search{flex:1 1 240px;max-width:340px}
+.search input{width:100%;min-height:46px;padding:0 16px;border-radius:999px;border:1px solid #D2BCC3;background:var(--surface)}
+.search input:focus{border-color:var(--berry);outline:2px solid var(--berry);outline-offset:1px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:transparent;cursor:pointer;font-weight:500}
+.chip:hover{border-color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* Vitrine */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:clamp(12px,2vw,20px);padding-bottom:56px}
+.card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.ph{aspect-ratio:1/1;margin:8px;border-radius:12px;background:var(--tint,var(--blush));display:grid;place-items:center;overflow:hidden}
+.ph span{padding:12px;text-align:center;font:700 clamp(1.3rem,3.4vw,1.7rem)/1.05 var(--display);letter-spacing:-.02em;color:rgba(43,27,42,.6)}
+.ph img{width:100%;height:100%;object-fit:cover}
+.info{display:flex;flex-direction:column;gap:6px;padding:6px 14px 14px;flex:1}
+.card-link{display:block;color:inherit;text-decoration:none}
+.card-link h3{font:600 1rem/1.3 var(--body);padding:6px 14px 0}
+.card-link:hover h3{text-decoration:underline}
+.price{font:700 1.3rem/1.2 var(--display)}
+.stock{font-size:.85rem;color:var(--berry-dark);font-weight:500;min-height:1.3em}
+.buy{margin-top:auto;padding-top:8px}
+.empty{grid-column:1/-1;padding:40px 0;text-align:center;color:var(--muted)}
+
+/* Botões */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px;border-radius:999px;border:1px solid transparent;font-weight:600;cursor:pointer;text-decoration:none}
+.btn-primary{background:var(--berry);color:#fff}
+.btn-primary:hover{background:var(--berry-dark)}
+.btn-quiet{background:var(--surface);border-color:#D2BCC3}
+.btn-quiet:hover{border-color:var(--ink)}
+.btn-block{width:100%}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+.link-btn{background:none;border:0;padding:6px 0;color:var(--berry-dark);text-decoration:underline;cursor:pointer;font-weight:500}
+.stepper{display:inline-flex;align-items:center;border:1px solid #D2BCC3;border-radius:999px;background:var(--surface)}
+.stepper button{width:44px;height:44px;border:0;background:none;border-radius:50%;font-size:1.25rem;cursor:pointer}
+.stepper button:hover{background:var(--blush)}
+.stepper button[disabled]{opacity:.35;cursor:not-allowed}
+.stepper output{min-width:28px;text-align:center;font-weight:600}
+.buy .stepper{width:100%;justify-content:space-between}
+.icon-btn{width:44px;height:44px;border-radius:50%;border:0;background:none;cursor:pointer;display:grid;place-items:center}
+.icon-btn:hover{background:var(--blush)}
+
+/* Rodapé */
+.foot{border-top:1px solid var(--line);padding:36px 0 48px;color:var(--muted);font-size:.92rem}
+.foot .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px}
+.foot h2{font:700 1rem var(--display);color:var(--ink);margin-bottom:6px}
+.foot p{margin:0 0 6px;max-width:44ch}
+
+/* Painel lateral */
+.overlay{position:fixed;inset:0;background:rgba(43,27,42,.5);z-index:30}
+.panel{position:fixed;top:0;right:0;bottom:0;width:min(470px,100%);background:var(--surface);z-index:31;display:flex;flex-direction:column;box-shadow:-12px 0 40px rgba(43,27,42,.18)}
+.panel[hidden],.overlay[hidden]{display:none}
+@media (prefers-reduced-motion:no-preference){
+  .panel:not([hidden]){animation:slide .22s ease-out}
+  @keyframes slide{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
+}
+.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:18px 20px 12px;border-bottom:1px solid var(--line)}
+.panel-head h2{font-size:1.4rem;letter-spacing:-.01em}
+.panel-head h2:focus{outline:none}
+.panel-head p{margin:2px 0 0}
+.panel-body{flex:1;overflow:auto;padding:18px 20px}
+.panel-foot{padding:14px 20px 18px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:10px;background:var(--surface)}
+.panel-foot:empty{display:none}
+.foot-actions{display:flex;gap:10px}
+.foot-actions .btn-primary{flex:1}
+
+.line-item{display:grid;grid-template-columns:1fr auto;gap:8px 12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.line-item:first-child{padding-top:0}
+.line-item h3{font:600 .98rem/1.3 var(--body)}
+.line-item .tot{font-weight:600;text-align:right}
+.row{display:flex;justify-content:space-between;gap:12px}
+.sum{display:flex;flex-direction:column;gap:6px}
+.sum .total{font:700 1.25rem var(--display);padding-top:8px;border-top:1px solid var(--line)}
+
+label.field{display:block;margin-bottom:14px;font-weight:500;font-size:.92rem}
+label.field small{font-weight:400;color:var(--muted)}
+.field input,.field textarea{display:block;width:100%;margin-top:6px;padding:12px 14px;border:1px solid #CDB5BC;border-radius:10px;background:#fff;font-size:1rem}
+.field textarea{resize:vertical;min-height:72px}
+.field input:focus,.field textarea:focus{outline:2px solid var(--berry);outline-offset:1px;border-color:var(--berry)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+.notice{padding:12px 14px;border-radius:12px;background:#FFF3D6;font-size:.92rem;margin-bottom:14px}
+.error{padding:12px 14px;border-radius:12px;background:#FBE1E4;color:#7A1230;font-size:.92rem;margin-top:12px}
+.pix{background:var(--blush);border-radius:16px;padding:16px;margin:16px 0}
+.pix h3{font-size:1.05rem;margin-bottom:4px}
+.pix textarea{width:100%;margin:10px 0;padding:10px;border:1px solid #E3BFC8;border-radius:10px;background:#fff;font:.76rem/1.35 ui-monospace,Menlo,Consolas,monospace;word-break:break-all;resize:none}
+.qr{display:flex;justify-content:center;margin-top:12px}
+.qr>div{background:#fff;padding:10px;border-radius:12px}
+.steps{margin:0 0 6px;padding-left:20px}
+.steps li{margin-bottom:4px}
+.drop{display:block;border:2px dashed #CDB5BC;border-radius:14px;padding:18px;text-align:center;cursor:pointer;background:#fff}
+.drop:hover,.drop:focus-within{border-color:var(--berry)}
+.drop input{position:absolute;opacity:0;width:1px;height:1px}
+.drop .thumb{max-height:150px;margin:0 auto 8px;border-radius:8px}
+.done{text-align:center;padding:20px 0}
+.done .ok{width:68px;height:68px;border-radius:50%;background:var(--honey);display:grid;place-items:center;margin:0 auto 14px}
+.done h3{font-size:1.5rem;margin-bottom:6px}
+.code{display:inline-block;margin:10px 0;padding:6px 14px;border-radius:999px;background:var(--blush);font-weight:600;letter-spacing:.02em}
+
+.actions{display:flex;align-items:center;gap:6px}
+.cart-btn.quiet{border-color:transparent;background:transparent}
+.cart-btn.quiet:hover{border-color:var(--line);background:var(--surface)}
+.hero-track{margin:10px 0 0}
+input[name=code]{text-transform:uppercase;letter-spacing:.04em}
+.timeline{list-style:none;margin:14px 0 8px;padding:0}
+.timeline li{position:relative;padding:0 0 24px 46px;min-height:32px}
+.timeline li::before{content:"";position:absolute;left:15px;top:34px;bottom:2px;width:2px;background:var(--line)}
+.timeline li:last-child{padding-bottom:4px}
+.timeline li:last-child::before{display:none}
+.timeline li.is-done::before{background:var(--berry)}
+.timeline .dot{position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;border:2px solid var(--line);background:#fff;display:grid;place-items:center}
+.timeline li.is-done .dot{background:var(--berry);border-color:var(--berry);color:#fff}
+.timeline li.is-now .dot{background:var(--honey);border-color:var(--honey)}
+.timeline li.is-now .dot::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--ink)}
+.timeline strong{display:block;line-height:32px}
+.timeline li.is-todo strong{color:var(--muted);font-weight:500}
+.timeline p{margin:0;color:var(--muted);font-size:.92rem}
+.track-title{font-size:1.25rem;letter-spacing:-.01em}
+.track-title:focus{outline:none}
+.sec-title{font:700 1rem var(--display);margin:22px 0 6px}
+.items{list-style:none;margin:0 0 14px;padding:0}
+.items li{padding:8px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+[hidden]{display:none!important}
+.price s{font:400 .85rem var(--body);color:var(--muted);margin-left:4px}
+.tag{display:inline-block;background:var(--honey);color:var(--ink);font-weight:600;font-size:.78rem;padding:2px 10px;border-radius:999px}
+.skel .ph{background:#F1E3E6}
+.sk-line{height:14px;border-radius:7px;background:#F1E3E6;margin:8px 0}
+.sk-line.short{width:45%}
+.pdp{padding-top:12px;padding-bottom:56px}
+.back{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:var(--berry-dark);font-weight:600;text-decoration:none}
+.back:hover{text-decoration:underline}
+.pdp-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;margin-top:4px}
+@media (min-width:820px){.pdp-grid{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:44px;align-items:start}}
+.stage{position:relative}
+.slides{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;border-radius:18px;background:var(--surface);border:1px solid var(--line)}
+.slides::-webkit-scrollbar{display:none}
+.slides .slide{flex:0 0 100%;scroll-snap-align:center;margin:0;border-radius:0;aspect-ratio:1/1}
+.gal-btn{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.94);cursor:pointer;display:grid;place-items:center}
+.gal-btn:hover{border-color:var(--ink)}
+.gal-btn.prev{left:10px}.gal-btn.next{right:10px}
+.gal-count{position:absolute;right:12px;bottom:12px;background:rgba(43,27,42,.75);color:#fff;font-size:.8rem;padding:3px 10px;border-radius:999px}
+.gthumbs{display:flex;gap:8px;margin-top:10px;overflow-x:auto;padding:2px 2px 4px}
+.gthumb{flex:none;width:64px;height:64px;padding:0;border:2px solid transparent;border-radius:12px;background:none;cursor:pointer;overflow:hidden}
+.gthumb[aria-current="true"]{border-color:var(--ink)}
+.gthumb .ph{margin:0;width:100%;height:100%;border-radius:0;aspect-ratio:auto}
+.ph.sm span{display:none}
+.crumb{margin:6px 0 4px}
+.pdp-title{font-size:clamp(1.6rem,4.5vw,2.3rem);line-height:1.1;letter-spacing:-.02em}
+.pdp-title:focus{outline:none}
+.pdp-price{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px 12px;margin:14px 0 4px}
+.pdp-price .price{font-size:2rem}
+.pdp-price s{font-size:1.05rem;margin:0}
+.stock-line{margin:0;font-weight:500}
+.stock-line.low{color:var(--berry-dark)}
+.pdp-buy{max-width:340px;margin:16px 0 8px}
+.pdp-info .perks{margin-top:14px}
+.pdp-sec{margin-top:34px}
+.pdp-sec h2{font-size:1.25rem;letter-spacing:-.01em;margin-bottom:8px}
+.pdp-sec p{max-width:62ch;margin:0 0 12px}
+.det{list-style:none;margin:0;padding:0;max-width:62ch}
+.det li{padding:9px 0;border-bottom:1px solid var(--line)}
+.related{margin-top:44px}
+.related h2{font-size:1.25rem;letter-spacing:-.01em;margin-bottom:12px}
+.related .grid{padding-bottom:0}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;z-index:60;font-size:.92rem;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+@media (max-width:600px){.hide-sm{display:none}}
+@media (max-width:520px){.hero{padding-top:92px}.grid{grid-template-columns:repeat(2,1fr)}.info{padding:4px 10px 12px}.card-link h3{padding:4px 10px 0}.price{font-size:1.15rem}}
+</style>
+</head>
+<body>
+
+<header class="top" id="topbar">
+  <div class="wrap">
+    <a class="brand" href="#" aria-label="Casa de Sensações, início">
+      <svg viewBox="0 0 32 24" aria-hidden="true"><path d="M3 16 16 4l13 12" fill="none" stroke="#F2B632" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Casa de Sensações
+    </a>
+    <div class="actions">
+      <button class="cart-btn quiet hide-sm" type="button" data-act="open-track">Acompanhar pedido</button>
+      <button class="cart-btn" type="button" data-act="open-cart" id="cartBtn" aria-label="Abrir sacola">
+        Sacola <span class="badge" id="cartCount" data-zero="true">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" id="heroSec">
+    <svg class="roof" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polyline points="-2,96 22,12 102,96"/></svg>
+    <div class="wrap">
+      <h1>Onde você se sente bem.</h1>
+      <p>Maquiagem e cuidados com a pele escolhidos com carinho. Peça aqui e receba em casa.</p>
+      <ul class="perks">
+        <li id="perkDelivery">Entrega grátis na cidade</li>
+        <li>Pagamento por Pix</li>
+      </ul>
+      <p class="hero-track"><button class="link-btn" type="button" data-act="open-track">Já fez um pedido? Acompanhe aqui</button></p>
+    </div>
+  </section>
+
+  <section class="wrap" aria-label="Produtos" id="shop">
+    <div id="shopNote"></div>
+    <div class="toolbar">
+      <div class="search">
+        <label class="sr-only" for="q">Buscar produtos</label>
+        <input id="q" type="search" placeholder="Buscar produtos" autocomplete="off">
+      </div>
+      <div class="chips" id="chips" role="group" aria-label="Categorias"></div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="pdp" aria-label="Detalhes do produto" hidden></section>
+</main>
+
+<footer class="foot" id="pagefoot">
+  <div class="wrap cols">
+    <div>
+      <h2>Como funciona</h2>
+      <p>Você escolhe os produtos, paga por Pix e anexa o comprovante. Depois de conferirmos o pagamento, entregamos no seu endereço.</p>
+    </div>
+    <div>
+      <h2>Desistência</h2>
+      <p>Você pode desistir da compra em até 7 dias após receber o produto, conforme o Código de Defesa do Consumidor.</p>
+    </div>
+    <div>
+      <h2>Seus dados</h2>
+      <p>Usamos nome, telefone, endereço e e-mail (se você informar) só para entregar e avisar sobre o seu pedido. Não compartilhamos com terceiros.</p>
+      <p id="contactLine"></p>
+    </div>
+  </div>
+</footer>
+
+<div class="overlay" id="overlay" hidden></div>
+<aside class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="panelTitle" hidden>
+  <div class="panel-head">
+    <div>
+      <h2 id="panelTitle" tabindex="-1"></h2>
+      <p class="muted small" id="stepInfo"></p>
+    </div>
+    <button class="icon-btn" type="button" data-act="close" aria-label="Fechar">
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4l12 12M16 4 4 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <div class="panel-body" id="panelBody"></div>
+  <div class="panel-foot" id="panelFoot"></div>
+</aside>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+<script>
+/* =====================================================================
+   CONFIGURAÇÕES — edite esta parte
+   ===================================================================== */
+const CONFIG = {
+  // Endereço do Google Apps Script (o mesmo que você já usa). Vazio = modo de teste:
+  // aparecem produtos de exemplo e nenhum pedido é enviado.
+  appsScriptUrl: "https://script.google.com/macros/s/AKfycbwu2h2frafz7Y009Tt3NBiz6unSdlpcT_ekELNBZDxrvdH66zcOnwiL7tPTG5e5EdDS/exec",
+
+  // Dados do Pix. A chave pode ser CPF/CNPJ (só números), e-mail, celular (+5511999999999) ou chave aleatória.
+  pix: {
+    key: "1198a005-e889-4898-880e-c975dfd4fc8f",                           // ex.: "+5511999999999"
+    receiverName: "ICARO MAGNO VIEIRA", // nome do recebedor (até 25 letras, sem acento)
+    city: "MATIAS BARBOSA"                 // cidade do recebedor (até 15 letras, sem acento)
+  },
+
+  // Só vale no modo de teste. Com o script ligado, a taxa de entrega vem do TAXA_DE_ENTREGA do script.
+  deliveryFee: 0,
+
+  // Opcional: número com DDD e sem símbolos (ex.: "5511999999999"). Se vazio, o contato não aparece.
+  whatsapp: "5532999842422",
+
+  // Pasta das fotos, ao lado do index.html. Na planilha você escreve só o nome do arquivo (ex.: P001-1.jpg).
+  imgFolder: "img/"
+};
+
+/* Cor de fundo de cada categoria (aparece enquanto o produto não tem foto).
+   Categorias que não estiverem aqui ganham uma cor automática. */
+const CATEGORIES = {
+  "Cuidados com a Pele": "#FAD9C1",
+  "Lábios": "#F6CBD3",
+  "Olhos": "#DCD3EE",
+  "Maquiagem": "#E9D0EA"
+};
+const PALETTE = ["#FAD9C1","#F6CBD3","#DCD3EE","#E9D0EA","#D3E8DC","#FBE7B5"];
+
+/* Produtos de exemplo: aparecem só no modo de teste (appsScriptUrl vazio). Os de verdade vêm da aba Produtos. */
+const SAMPLE_PRODUCTS = [
+  { id:"P001", name:"Kit Esfoliante, Sabonete e Hidratante de Pitaya Porán", brand:"Porán", category:"Cuidados com a Pele", price:49.25, oldPrice:59, stock:3, featured:true, photos:[],
+    desc:"Kit de cuidado com a pele com aroma de frutas.\n\nUse o sabonete na limpeza, o esfoliante uma ou duas vezes por semana e o hidratante depois do banho.",
+    details:["Contém: sabonete, esfoliante e hidratante","Tipo de pele: todos","Aroma: pitaya"] },
+  { id:"P002", name:"Kit Skincare Clareador Vitamina C Dermachem", brand:"Dermachem", category:"Cuidados com a Pele", price:53.45, oldPrice:0, stock:5, featured:false, photos:[], desc:"", details:[] },
+  { id:"P003", name:"Hidratante Labial Carmed Fini Amoras", brand:"Carmed Fini", category:"Lábios", price:40.48, oldPrice:0, stock:5, featured:false, photos:[], desc:"", details:[] },
+  { id:"P004", name:"Máscara Hidratante Labial com Colágeno Boca Perfect Kiss", brand:"Kiss", category:"Lábios", price:49.27, oldPrice:0, stock:1, featured:false, photos:[], desc:"", details:[] },
+  { id:"P005", name:"Máscara de Cílios Peel Off Selfie Melu by Ruby Rose", brand:"Melu", category:"Olhos", price:34.86, oldPrice:0, stock:5, featured:false, photos:[], desc:"", details:[] },
+  { id:"P006", name:"Esponja para Maquiagem Ruby Rose Midnight", brand:"Ruby Rose", category:"Maquiagem", price:39.00, oldPrice:0, stock:0, featured:false, photos:[], desc:"", details:[] }
+];
+
+/* =====================================================================
+   A partir daqui é o funcionamento da loja
+   ===================================================================== */
+const $ = s => document.querySelector(s);
+const brl = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const round2 = v => Math.round(v*100)/100;
+const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const norm = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+const reduceMotion = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+const BASE_TITLE = document.title;
+function save(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+function read(k,d){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch(e){ return d; } }
+async function copyText(text){
+  try{ await navigator.clipboard.writeText(text); return true; }
+  catch(err){
+    const ta=document.createElement("textarea"); ta.value=text; ta.setAttribute("readonly","");
+    ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select();
+    let ok=false; try{ ok=document.execCommand("copy"); }catch(e){} ta.remove(); return ok;
+  }
+}
+
+let PRODUCTS = [];
+const byId = id => PRODUCTS.find(p=>p.id===id);
+function tintFor(cat){
+  if(CATEGORIES[cat]) return CATEGORIES[cat];
+  let h=0; for(const ch of String(cat)) h=(h*31+ch.charCodeAt(0))>>>0;
+  return PALETTE[h%PALETTE.length];
+}
+
+const state = {
+  cart: read("cs_cart", {}), filter: "Todos", q: "",
+  open: false, view: "cart",
+  form: read("cs_customer", {name:"",phone:"",email:"",street:"",district:"",complement:"",notes:""}),
+  code: "", receipt: null, sending: false, checking: false, error: "", notice: "", opener: null,
+  track: {code:"",phone:"",loading:false,error:"",result:null},
+  loaded: false, loadError: false, testMode: false, fee: CONFIG.deliveryFee,
+  route: {type:"shop"}, routed: false, shopScroll: 0, cameFromShop: false
+};
+if(!state.cart || typeof state.cart!=="object") state.cart={};
+
+/* ---------- Produtos (vêm da aba "Produtos" da planilha) ---------- */
+function photoUrl(n){
+  n=String(n).trim();
+  if(/^(https?:)?\/\//.test(n)||n.startsWith("/")||n.startsWith("data:")) return n;
+  return CONFIG.imgFolder+n.split("/").map(encodeURIComponent).join("/");
+}
+function normalizeProduct(p){
+  return { id:String(p.id), name:p.titulo, brand:p.marca||"", category:p.categoria||"Outros",
+           price:Number(p.preco)||0, oldPrice:Number(p.precoAntigo)||0,
+           stock:Math.max(0,Math.floor(Number(p.estoque)||0)),
+           desc:p.descricao||"", details:p.detalhes||[], photos:(p.fotos||[]).map(photoUrl), featured:!!p.destaque };
+}
+function setProducts(list,cfg){
+  PRODUCTS=list.slice().sort((a,b)=>(b.featured?1:0)-(a.featured?1:0));
+  state.fee=(cfg&&typeof cfg.taxaEntrega==="number")?cfg.taxaEntrega:CONFIG.deliveryFee;
+  state.loaded=true;
+  if(state.filter!=="Todos" && !PRODUCTS.some(p=>p.category===state.filter)) state.filter="Todos";
+}
+async function loadProducts(opts){
+  const fresh=opts&&opts.fresh;
+  if(!CONFIG.appsScriptUrl){ state.testMode=true; setProducts(SAMPLE_PRODUCTS,null); return true; }
+  try{
+    const url=CONFIG.appsScriptUrl+(CONFIG.appsScriptUrl.includes("?")?"&":"?")+"action=produtos";
+    const r=await fetch(url), j=await r.json();
+    if(!j||!j.ok||!Array.isArray(j.produtos)) throw new Error((j&&j.error)||"Resposta inesperada");
+    save("cs_products",{t:Date.now(),data:j});
+    setProducts(j.produtos.map(normalizeProduct),j.config); return true;
+  }catch(err){
+    if(fresh) return false;
+    const c=read("cs_products",null);           /* sem internet: usa a última lista guardada (até 24 h) */
+    if(c&&c.data&&Date.now()-c.t<24*3600*1000){ setProducts(c.data.produtos.map(normalizeProduct),c.data.config); return true; }
+    return false;
+  }
+}
+
+/* ---------- Sacola ---------- */
+function qty(id){ return state.cart[id]||0; }
+function totals(){
+  let sub=0,count=0;
+  for(const [id,q] of Object.entries(state.cart)){ const p=byId(id); if(p){ sub+=p.price*q; count+=q; } }
+  const delivery = count ? state.fee : 0;
+  return { sub:round2(sub), delivery:round2(delivery), total:round2(sub+delivery), count };
+}
+/* Ajusta a sacola ao que existe agora na loja. Devolve a lista de avisos para o cliente. */
+function reconcileCart(prev){
+  const notes=[];
+  for(const [id,q] of Object.entries({...state.cart})){
+    const p=byId(id), nome=(prev&&prev[id]&&prev[id].name)||"Um produto";
+    if(!p||p.stock<=0){ delete state.cart[id]; notes.push(`${p?p.name:nome} não está mais disponível e saiu da sacola.`); continue; }
+    if(q>p.stock){ state.cart[id]=p.stock; notes.push(`${p.name}: só restam ${p.stock} ${p.stock===1?"unidade":"unidades"}.`); }
+    if(prev&&prev[id]&&Math.abs(prev[id].price-p.price)>0.004) notes.push(`${p.name}: o preço mudou de ${brl(prev[id].price)} para ${brl(p.price)}.`);
+  }
+  save("cs_cart",state.cart);
+  return notes;
+}
+function keepFocus(fn){
+  const a=document.activeElement;
+  let act=a&&a.dataset&&a.dataset.act, id=a&&a.dataset&&a.dataset.id;
+  const host=a&&a.closest?(a.closest("#panel")||a.closest("#pdp")||a.closest("#grid")):null;
+  const scope=host||$("#grid");
+  fn();
+  if(!act||!id) return;
+  if(act==="add") act="inc";
+  const t = scope.querySelector(`[data-act="${act}"][data-id="${id}"]`);
+  if(t && !t.disabled) t.focus();
+}
+/* Atualiza o botão de comprar na tela que está aberta (vitrine ou página do produto) */
+function refreshBuyViews(){
+  if(state.route.type==="shop") renderGrid();
+  else{ const p=byId(state.route.id), b=$("#pdpBuy"); if(p&&b) b.innerHTML=buyControl(p); }
+}
+function setQty(id,n){
+  const p=byId(id); if(!p) return;
+  n=Math.max(0,Math.min(n,p.stock));
+  keepFocus(()=>{
+    if(n===0) delete state.cart[id]; else state.cart[id]=n;
+    save("cs_cart",state.cart);
+    refreshBuyViews(); updateCount();
+    if(state.open) renderPanel();
+  });
+}
+function updateCount(){
+  const {count}=totals();
+  const b=$("#cartCount"); b.textContent=count; b.dataset.zero=count===0;
+  $("#cartBtn").setAttribute("aria-label", count? `Abrir sacola, ${count} ${count===1?"item":"itens"}` : "Abrir sacola");
+}
+function updateDeliveryTexts(){
+  const el=$("#perkDelivery"); if(el) el.textContent = state.fee>0 ? `Entrega na cidade por ${brl(state.fee)}` : "Entrega grátis na cidade";
+}
+let toastTimer;
+function toast(msg){
+  const t=$("#toast"); t.textContent=msg; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove("show"),2200);
+}
+
+/* ---------- Vitrine ---------- */
+function stockLabel(p,limit){
+  if(p.stock<=0) return "Esgotado";
+  if(p.stock===1) return "Última unidade";
+  if(p.stock<=limit) return `Restam ${p.stock} unidades`;
+  return "";
+}
+function phBlock(p,i,o){
+  o=o||{};
+  const src=p.photos[i];
+  const alt=o.alt||p.name;
+  const inner=src?`<img src="${esc(src)}" alt="${esc(alt)}" ${o.eager?"":'loading="lazy" '}decoding="async">`:`<span>${esc(p.brand||p.name)}</span>`;
+  return `<div class="ph${o.cls?" "+o.cls:""}" style="--tint:${tintFor(p.category)}" data-brand="${esc(p.brand||p.name)}">${inner}</div>`;
+}
+/* Foto que não carrega (arquivo faltando ou nome errado): troca pelo bloco colorido com a marca */
+document.addEventListener("error",e=>{
+  const t=e.target; if(!t||t.tagName!=="IMG") return;
+  const h=t.closest(".ph"); if(h) h.innerHTML=`<span>${esc(h.dataset.brand||"")}</span>`;
+},true);
+
+function renderChips(){
+  const cats=[...new Set(PRODUCTS.map(p=>p.category).filter(Boolean))];
+  if(cats.length<2){ $("#chips").innerHTML=""; return; }
+  $("#chips").innerHTML=["Todos",...cats].map(n=>`<button type="button" class="chip" data-act="cat" data-cat="${esc(n)}" aria-pressed="${state.filter===n}">${esc(n)}</button>`).join("");
+}
+function buyControl(p){
+  if(p.stock<=0) return `<button class="btn btn-quiet btn-block" disabled>Esgotado</button>`;
+  const q=qty(p.id);
+  if(q===0) return `<button class="btn btn-primary btn-block" data-act="add" data-id="${esc(p.id)}">Adicionar à sacola</button>`;
+  return `<div class="stepper" role="group" aria-label="Quantidade de ${esc(p.name)}">
+    <button type="button" data-act="dec" data-id="${esc(p.id)}" aria-label="Diminuir quantidade">−</button>
+    <output aria-live="polite">${q}</output>
+    <button type="button" data-act="inc" data-id="${esc(p.id)}" aria-label="Aumentar quantidade" ${q>=p.stock?"disabled":""}>+</button>
+  </div>`;
+}
+function priceHtml(p){
+  const old=p.oldPrice>p.price?`<s>${brl(p.oldPrice)}</s>`:"";
+  return `${brl(p.price)} ${old}`;
+}
+function cardHtml(p,o){
+  const buy=!o||o.buy!==false;
+  const href=`#/p/${encodeURIComponent(p.id)}`;
+  const st=p.stock>0?stockLabel(p,3):"";
+  return `<article class="card">
+    <a class="card-link" href="${href}" data-pid="${esc(p.id)}">
+      ${phBlock(p,0)}
+      <h3>${esc(p.name)}</h3>
+    </a>
+    <div class="info">
+      <div class="price">${priceHtml(p)}</div>
+      <div class="stock">${st}</div>
+      <div class="buy">${buy?buyControl(p):`<a class="btn btn-quiet btn-block" href="${href}">Ver produto</a>`}</div>
+    </div>
+  </article>`;
+}
+function renderGrid(){
+  const g=$("#grid");
+  g.setAttribute("aria-busy",String(!state.loaded&&!state.loadError));
+  if(!state.loaded){
+    g.innerHTML = state.loadError
+      ? `<div class="empty"><p>Não conseguimos carregar os produtos agora. Confira sua conexão e tente de novo.</p><button class="btn btn-primary" data-act="reload">Tentar de novo</button></div>`
+      : Array(8).fill(`<div class="card skel" aria-hidden="true"><div class="ph"></div><div class="info"><div class="sk-line"></div><div class="sk-line short"></div></div></div>`).join("");
+    return;
+  }
+  if(!PRODUCTS.length){ g.innerHTML=`<div class="empty"><p>Ainda não há produtos disponíveis. Volte em breve!</p></div>`; return; }
+  const q=norm(state.q.trim());
+  const list=PRODUCTS.filter(p=>(state.filter==="Todos"||p.category===state.filter) && (!q||norm(p.name+" "+p.brand+" "+p.category).includes(q)));
+  if(!list.length){
+    g.innerHTML=`<div class="empty"><p>Nenhum produto encontrado. Tente outra palavra ou veja todas as categorias.</p><button class="btn btn-quiet" data-act="clear">Ver todos os produtos</button></div>`;
+    return;
+  }
+  g.innerHTML=list.map(p=>cardHtml(p)).join("");
+}
+function renderShopNote(){
+  $("#shopNote").innerHTML = state.testMode
+    ? `<div class="notice" style="margin-top:8px">Modo de teste: estes são produtos de exemplo e nenhum pedido será registrado. Para mostrar os seus produtos, preencha <strong>appsScriptUrl</strong> no início do script do index.html.</div>`
+    : "";
+}
+
+/* ---------- Página do produto ---------- */
+const CHEV_L='<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const CHEV_R='<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function descHtml(t){ return t.split(/\n{2,}/).filter(s=>s.trim()).map(par=>`<p>${esc(par.trim()).replace(/\n/g,"<br>")}</p>`).join(""); }
+function detailsHtml(list){
+  return `<ul class="det">`+list.map(l=>{
+    const i=l.indexOf(":");
+    return i>0&&i<40?`<li><strong>${esc(l.slice(0,i))}:</strong> ${esc(l.slice(i+1).trim())}</li>`:`<li>${esc(l)}</li>`;
+  }).join("")+`</ul>`;
+}
+function renderProduct(id){
+  const box=$("#pdp");
+  const back=`<a class="back" href="#/" data-act="back-shop">${CHEV_L} Voltar à loja</a>`;
+  if(!state.loaded){
+    box.innerHTML=`<div class="wrap pdp">${back}<p class="muted" style="padding:24px 0" id="pdpTitle" tabindex="-1">${state.loadError?"Não conseguimos carregar o produto agora. Confira sua conexão e recarregue a página.":"Carregando…"}</p></div>`;
+    return;
+  }
+  const p=byId(id);
+  if(!p){
+    document.title=`Produto não encontrado | ${BASE_TITLE}`;
+    box.innerHTML=`<div class="wrap pdp">${back}<h1 class="pdp-title" id="pdpTitle" tabindex="-1">Produto não encontrado</h1><p class="muted">Este produto não está mais disponível. Veja o que temos na loja.</p><a class="btn btn-primary" href="#/" data-act="back-shop">Ver todos os produtos</a></div>`;
+    return;
+  }
+  document.title=`${p.name} | ${BASE_TITLE}`;
+  const n=Math.max(1,p.photos.length), multi=p.photos.length>1;
+  const slides=Array.from({length:n},(_,i)=>phBlock(p,i,{cls:"slide",eager:i===0,alt:`${p.name}${multi?`, foto ${i+1} de ${n}`:""}`})).join("");
+  const thumbs=multi?`<div class="gthumbs">${Array.from({length:n},(_,i)=>`<button type="button" class="gthumb" data-act="gal-go" data-i="${i}" aria-label="Ver foto ${i+1}" aria-current="${i===0}">${phBlock(p,i,{cls:"sm",alt:""})}</button>`).join("")}</div>`:"";
+  const desc=p.desc.trim()?`<section class="pdp-sec"><h2>Descrição</h2>${descHtml(p.desc)}</section>`:"";
+  const det=p.details.length?`<section class="pdp-sec"><h2>Detalhes</h2>${detailsHtml(p.details)}</section>`:"";
+  const rel=PRODUCTS.filter(x=>x.id!==p.id&&x.category===p.category).sort((a,b)=>(b.stock>0)-(a.stock>0)).slice(0,4);
+  const related=rel.length?`<section class="related"><h2>Mais em ${esc(p.category)}</h2><div class="grid">${rel.map(x=>cardHtml(x,{buy:false})).join("")}</div></section>`:"";
+  const off=p.oldPrice>p.price?Math.round((1-p.price/p.oldPrice)*100):0;
+  const low=p.stock>0&&p.stock<=5;
+  box.innerHTML=`<div class="wrap pdp">
+    ${back}
+    <div class="pdp-grid">
+      <div class="gallery">
+        <div class="stage">
+          <div class="slides" id="slides" tabindex="0" role="group" aria-label="Fotos do produto">${slides}</div>
+          ${multi?`<button type="button" class="gal-btn prev" data-act="gal-prev" aria-label="Foto anterior">${CHEV_L}</button>
+                   <button type="button" class="gal-btn next" data-act="gal-next" aria-label="Próxima foto">${CHEV_R}</button>
+                   <div class="gal-count" id="galCount" aria-live="polite">1 / ${n}</div>`:""}
+        </div>
+        ${thumbs}
+      </div>
+      <div class="pdp-info">
+        <p class="muted small crumb">${esc(p.category)}</p>
+        <h1 class="pdp-title" id="pdpTitle" tabindex="-1">${esc(p.name)}</h1>
+        ${p.brand?`<p class="muted" style="margin:6px 0 0">Marca: ${esc(p.brand)}</p>`:""}
+        <div class="pdp-price"><span class="price">${priceHtml(p)}</span>${off>=1?`<span class="tag">${off}% off</span>`:""}</div>
+        <p class="stock-line${low?" low":""}">${p.stock<=0?"Esgotado":(stockLabel(p,5)||"Em estoque")}</p>
+        <div class="pdp-buy" id="pdpBuy">${buyControl(p)}</div>
+        <button type="button" class="link-btn" data-act="share" data-id="${esc(p.id)}">Compartilhar este produto</button>
+        <ul class="perks">
+          <li>${state.fee>0?`Entrega na cidade por ${brl(state.fee)}`:"Entrega grátis na cidade"}</li>
+          <li>Pagamento por Pix</li>
+        </ul>
+      </div>
+    </div>
+    ${desc}${det}${related}
+  </div>`;
+}
+function galleryIndex(){ const s=$("#slides"); return s&&s.clientWidth?Math.round(s.scrollLeft/s.clientWidth):0; }
+function setGalleryIndex(i){
+  const s=$("#slides"); if(!s) return;
+  const c=$("#galCount"); if(c) c.textContent=`${i+1} / ${s.children.length}`;
+  document.querySelectorAll(".gthumb").forEach((b,k)=>b.setAttribute("aria-current",String(k===i)));
+}
+function galleryGo(i){
+  const s=$("#slides"); if(!s) return;
+  i=Math.max(0,Math.min(s.children.length-1,i));
+  s.scrollTo({left:i*s.clientWidth,behavior:reduceMotion?"auto":"smooth"});
+  setGalleryIndex(i);
+}
+function bindGallery(){
+  const s=$("#slides"); if(!s||s.children.length<2) return;
+  let raf=0;
+  s.addEventListener("scroll",()=>{ cancelAnimationFrame(raf); raf=requestAnimationFrame(()=>setGalleryIndex(galleryIndex())); },{passive:true});
+}
+async function shareProduct(id){
+  const p=byId(id); if(!p) return;
+  const url=location.href.split("#")[0]+"#/p/"+encodeURIComponent(id);
+  if(navigator.share){
+    try{ await navigator.share({title:p.name,text:`${p.name} na Casa de Sensações`,url}); return; }
+    catch(err){ if(err&&err.name==="AbortError") return; }
+  }
+  toast(await copyText(url)?"Link do produto copiado":"Não foi possível copiar o link");
+}
+
+/* ---------- Navegação entre a vitrine e a página do produto (#/p/CÓDIGO) ---------- */
+function applyRoute(){
+  const prev=state.route;
+  if(prev.type==="shop") state.shopScroll=window.scrollY;      /* guarda antes de esconder a vitrine */
+  const m=location.hash.match(/^#\/p\/(.+)$/);
+  const r=m?{type:"product",id:decodeURIComponent(m[1])}:{type:"shop"};
+  state.route=r;
+  const isP=r.type==="product";
+  $("#heroSec").hidden=isP; $("#shop").hidden=isP; $("#pdp").hidden=!isP;
+  if(isP){
+    state.cameFromShop=prev.type==="shop"&&state.routed;
+    renderProduct(r.id); bindGallery();
+    window.scrollTo(0,0);
+    const h=$("#pdpTitle"); if(h) h.focus({preventScroll:true});
+  }else{
+    document.title=BASE_TITLE;
+    renderGrid();
+    window.scrollTo(0,prev.type==="product"?state.shopScroll:0);
+    if(prev.type==="product"){ const a=document.querySelector(`[data-pid="${CSS.escape(prev.id)}"]`); if(a) a.focus({preventScroll:true}); }
+  }
+  state.routed=true;
+}
+
+/* ---------- Pix (copia e cola) ---------- */
+function crc16(str){
+  let crc=0xFFFF;
+  for(let i=0;i<str.length;i++){
+    crc^=str.charCodeAt(i)<<8;
+    for(let j=0;j<8;j++) crc=(crc&0x8000)?((crc<<1)^0x1021):(crc<<1);
+    crc&=0xFFFF;
+  }
+  return crc.toString(16).toUpperCase().padStart(4,"0");
+}
+function clean(s,max){ return s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^A-Za-z0-9 ]/g,"").toUpperCase().trim().slice(0,max); }
+function pixPayload({key,name,city,amount,txid}){
+  const f=(id,v)=>id+String(v.length).padStart(2,"0")+v;
+  const account=f("26",f("00","br.gov.bcb.pix")+f("01",key));
+  let p=f("00","01")+f("01","11")+account+f("52","0000")+f("53","986")
+       +(amount>0?f("54",amount.toFixed(2)):"")+f("58","BR")+f("59",name)+f("60",city)
+       +f("62",f("05",txid||"***"));
+  p+="6304";
+  return p+crc16(p);
+}
+function makeCode(){
+  const d=new Date(), p=n=>String(n).padStart(2,"0");
+  const r=Math.random().toString(36).slice(2,6).toUpperCase().padEnd(4,"X");
+  return "CS"+String(d.getFullYear()).slice(2)+p(d.getMonth()+1)+p(d.getDate())+r;
+}
+function currentPix(){
+  const k=(CONFIG.pix.key||"").trim();
+  if(!k) return "";
+  return pixPayload({key:k,name:clean(CONFIG.pix.receiverName||"LOJA",25)||"LOJA",city:clean(CONFIG.pix.city||"BRASIL",15)||"BRASIL",amount:totals().total,txid:state.code});
+}
+
+/* ---------- Painel ---------- */
+function openPanel(view){
+  state.opener=document.activeElement;
+  state.open=true; state.view=view||"cart"; state.error=""; state.notice="";
+  $("#overlay").hidden=false; $("#panel").hidden=false;
+  ["#topbar","#main","#pagefoot"].forEach(s=>$(s).setAttribute("inert",""));
+  document.body.style.overflow="hidden";
+  renderPanel(); $("#panelTitle").focus();
+}
+function closePanel(){
+  if(state.sending) return;
+  state.open=false;
+  $("#overlay").hidden=true; $("#panel").hidden=true;
+  ["#topbar","#main","#pagefoot"].forEach(s=>$(s).removeAttribute("inert"));
+  document.body.style.overflow="";
+  if(state.view==="done"){ state.view="cart"; }
+  if(state.opener&&state.opener.focus) state.opener.focus();
+}
+function go(view){ state.view=view; state.error=""; if(view!=="cart") state.notice=""; renderPanel(); $("#panelBody").scrollTop=0; $("#panelTitle").focus(); }
+
+function renderPanel(){
+  const t=totals();
+  const titles={cart:"Sua sacola",details:"Seus dados",payment:"Pagamento",done:"Pedido recebido",track:"Acompanhar pedido"};
+  $("#panelTitle").textContent=titles[state.view];
+  $("#stepInfo").textContent = state.view==="details"?"Passo 1 de 2":state.view==="payment"?"Passo 2 de 2":"";
+  let body="",foot="";
+
+  if(state.view==="cart"){
+    if(!t.count){
+      body=`<div class="empty" style="padding:30px 0"><p>Sua sacola está vazia. Escolha produtos na vitrine.</p><button class="btn btn-primary" data-act="close">Ver produtos</button></div>`;
+    }else{
+      body=Object.entries(state.cart).map(([id,q])=>{ const p=byId(id); if(!p) return "";
+        return `<div class="line-item">
+          <div><h3>${esc(p.name)}</h3><div class="muted small">${brl(p.price)} cada</div></div>
+          <div class="tot">${brl(round2(p.price*q))}</div>
+          <div class="stepper" role="group" aria-label="Quantidade de ${esc(p.name)}">
+            <button type="button" data-act="dec" data-id="${id}" aria-label="Diminuir quantidade">−</button>
+            <output>${q}</output>
+            <button type="button" data-act="inc" data-id="${id}" aria-label="Aumentar quantidade" ${q>=p.stock?"disabled":""}>+</button>
+          </div>
+          <div style="text-align:right"><button class="link-btn" data-act="remove" data-id="${id}">Remover</button></div>
+        </div>`; }).join("");
+      foot=`<div class="sum">
+          <div class="row"><span>Produtos</span><span>${brl(t.sub)}</span></div>
+          <div class="row"><span>Entrega</span><span>${t.delivery?brl(t.delivery):"Grátis"}</span></div>
+          <div class="row total"><span>Total</span><span>${brl(t.total)}</span></div>
+        </div>
+        <button class="btn btn-primary btn-block" data-act="to-details">Continuar</button>`;
+    }
+  }
+
+  if(state.view==="cart" && state.notice) body=`<div class="notice" role="alert">${esc(state.notice)}</div>`+body;
+
+  if(state.view==="details"){
+    const f=state.form;
+    body=`<form id="detailsForm" novalidate>
+      <label class="field">Nome completo
+        <input name="name" required autocomplete="name" value="${esc(f.name)}"></label>
+      <label class="field">Telefone com DDD <small>(para avisarmos da entrega)</small>
+        <input name="phone" type="tel" inputmode="tel" required autocomplete="tel" value="${esc(f.phone)}"></label>
+      <label class="field">E-mail <small>(opcional, para receber atualizações do pedido)</small>
+        <input name="email" type="email" inputmode="email" autocomplete="email" value="${esc(f.email||"")}"></label>
+      <label class="field">Rua e número
+        <input name="street" required autocomplete="address-line1" value="${esc(f.street)}"></label>
+      <label class="field">Bairro
+        <input name="district" required autocomplete="address-level3" value="${esc(f.district)}"></label>
+      <label class="field">Complemento ou ponto de referência <small>(opcional)</small>
+        <input name="complement" value="${esc(f.complement)}"></label>
+      <label class="field">Observações <small>(opcional)</small>
+        <textarea name="notes">${esc(f.notes)}</textarea></label>
+      <div class="hp" aria-hidden="true"><label>Não preencha <input name="website" tabindex="-1" autocomplete="off"></label></div>
+      <div id="formError" role="alert"></div>
+    </form>`;
+    foot=`<div class="foot-actions">
+        <button class="btn btn-quiet" type="button" data-act="back-cart">Voltar</button>
+        <button class="btn btn-primary" type="submit" form="detailsForm" ${state.checking?"disabled":""}>${state.checking?"Conferindo estoque…":"Ir para o pagamento"}</button>
+      </div>`;
+  }
+
+  if(state.view==="payment"){
+    if(!state.code) state.code=makeCode();
+    const pix=currentPix();
+    const items=Object.entries(state.cart).map(([id,q])=>{const p=byId(id);return p?`<div class="row small"><span>${q}× ${esc(p.name)}</span><span>${brl(round2(p.price*q))}</span></div>`:"";}).join("");
+    const r=state.receipt;
+    const thumb = r ? (r.type.startsWith("image/")?`<img class="thumb" src="${r.dataUrl}" alt="Prévia do comprovante">`:`<p><strong>PDF</strong></p>`) : "";
+    body=`<div class="sum" style="margin-bottom:6px">${items}
+        <div class="row total"><span>Total a pagar</span><span>${brl(t.total)}</span></div></div>
+      <div class="pix">
+        <h3>Pague por Pix</h3>
+        ${pix?`<ol class="steps small">
+            <li>Copie o código abaixo ou leia o QR Code.</li>
+            <li>No app do seu banco, escolha Pix copia e cola.</li>
+            <li>Confira o valor de ${brl(t.total)} e pague.</li>
+          </ol>
+          <textarea id="pixCode" rows="4" readonly aria-label="Código Pix copia e cola">${pix}</textarea>
+          <button class="btn btn-primary btn-block" type="button" data-act="copy">Copiar código Pix</button>
+          <div class="qr"><div id="qrBox" aria-label="QR Code do Pix"></div></div>`
+        :`<div class="notice">A chave Pix ainda não foi configurada. Preencha <strong>CONFIG.pix.key</strong> no arquivo index.html.</div>`}
+      </div>
+      <h3 style="font-size:1.05rem;margin-bottom:8px">Anexe o comprovante</h3>
+      <label class="drop">
+        <input type="file" id="receipt" accept="image/*,application/pdf">
+        ${r?`${thumb}<div class="small">${esc(r.name)}</div><div class="link-btn">Trocar arquivo</div>`:`<div><strong>Escolher foto ou PDF do comprovante</strong></div><div class="muted small">Tire um print da tela do banco e anexe aqui</div>`}
+      </label>
+      ${state.error?`<div class="error" role="alert">${esc(state.error)}</div>`:""}`;
+    foot=`<div class="foot-actions">
+        <button class="btn btn-quiet" type="button" data-act="back-details" ${state.sending?"disabled":""}>Voltar</button>
+        <button class="btn btn-primary" type="button" data-act="send" ${state.sending?"disabled":""}>${state.sending?"Enviando…":"Enviar pedido"}</button>
+      </div>
+      <p class="muted small" style="margin:0">Ao enviar, você confirma que já fez o pagamento. Vamos conferir e avisar pelo telefone informado.</p>`;
+  }
+
+  if(state.view==="done"){
+    const test=!CONFIG.appsScriptUrl;
+    body=`<div class="done">
+        <div class="ok"><svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#2B1B2A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        ${state.doneInfo&&state.doneInfo.semEstoque
+          ?`<h3>Recebemos seu pedido, mas um item acabou</h3>
+        <div class="code">Pedido ${esc(state.doneCode)}</div>
+        <p class="muted">Enquanto você pagava, a última unidade foi vendida. Como o Pix já foi feito, vamos devolver o valor de ${brl(state.doneInfo.total)}. Entraremos em contato pelo telefone informado.</p>`
+          :`<h3>Recebemos seu pedido</h3>
+        <div class="code">Pedido ${esc(state.doneCode)}</div>
+        <p class="muted">Vamos conferir o pagamento e avisar pelo telefone informado quando o pedido estiver a caminho.${state.form.email?" As atualizações também vão para o seu e-mail.":""}</p>`}
+        ${test?`<div class="notice" style="text-align:left">Modo de teste: o envio para a planilha ainda não foi configurado, então este pedido não foi registrado.</div>`:""}
+        ${CONFIG.whatsapp?`<p><a class="link-btn" href="https://wa.me/${esc(CONFIG.whatsapp)}?text=${encodeURIComponent("Olá! Fiz o pedido "+state.doneCode)}">Falar com a loja sobre este pedido</a></p>`:""}
+      </div>`;
+    foot=`<div class="foot-actions">
+        ${test?"":`<button class="btn btn-quiet" type="button" data-act="track-this">Acompanhar este pedido</button>`}
+        <button class="btn btn-primary" type="button" data-act="close">Voltar à loja</button>
+      </div>`;
+  }
+
+  if(state.view==="track"){ const v=trackViews(); body=v.body; foot=v.foot; }
+
+  $("#panelBody").innerHTML=body; $("#panelFoot").innerHTML=foot;
+  if(state.view==="payment") drawQR();
+}
+function drawQR(){
+  const box=$("#qrBox"); if(!box) return;
+  const pix=currentPix(); if(!pix) return;
+  if(typeof QRCode==="undefined"){ box.parentElement.style.display="none"; return; }
+  box.innerHTML=""; new QRCode(box,{text:pix,width:176,height:176,correctLevel:QRCode.CorrectLevel.M});
+}
+
+/* ---------- Comprovante ---------- */
+function compressImage(file,maxSide=1400,quality=.75){
+  return new Promise((resolve,reject)=>{
+    const img=new Image(), url=URL.createObjectURL(file);
+    img.onload=()=>{
+      const s=Math.min(1,maxSide/Math.max(img.width,img.height));
+      const c=document.createElement("canvas"); c.width=Math.round(img.width*s); c.height=Math.round(img.height*s);
+      const ctx=c.getContext("2d"); ctx.fillStyle="#fff"; ctx.fillRect(0,0,c.width,c.height); ctx.drawImage(img,0,0,c.width,c.height);
+      URL.revokeObjectURL(url); resolve(c.toDataURL("image/jpeg",quality));
+    };
+    img.onerror=()=>{ URL.revokeObjectURL(url); reject(new Error("Não conseguimos ler essa imagem. Envie uma foto em JPG ou PNG, ou um PDF.")); };
+    img.src=url;
+  });
+}
+function readAsDataURL(file){
+  return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=()=>rej(new Error("Não conseguimos ler o arquivo.")); r.readAsDataURL(file); });
+}
+async function handleReceipt(file){
+  state.error="";
+  try{
+    if(file.type==="application/pdf"){
+      if(file.size>3*1024*1024) throw new Error("O PDF é grande demais (máximo 3 MB). Envie um print do comprovante.");
+      state.receipt={name:file.name,type:file.type,dataUrl:await readAsDataURL(file)};
+    }else if(file.type.startsWith("image/")){
+      const name=file.name.replace(/\.[^.]+$/,"")+".jpg";
+      state.receipt={name,type:"image/jpeg",dataUrl:await compressImage(file)};
+    }else throw new Error("Formato não aceito. Envie uma imagem ou um PDF.");
+  }catch(err){ state.receipt=null; state.error=err.message; }
+  renderPanel();
+}
+
+/* ---------- Envio do pedido ---------- */
+async function postOrder(payload){
+  const url=CONFIG.appsScriptUrl, body=JSON.stringify(payload);
+  try{
+    const r=await fetch(url,{method:"POST",body});
+    const j=await r.json();
+    if(j&&j.ok) return j;
+    throw Object.assign(new Error((j&&j.error)||"Falha ao registrar o pedido."),{known:true});
+  }catch(err){
+    if(err instanceof TypeError){
+      /* Rede ou bloqueio de leitura da resposta: reenvia em modo opaco (o script ignora pedidos repetidos) */
+      await fetch(url,{method:"POST",mode:"no-cors",body});
+      return null;
+    }
+    throw err;
+  }
+}
+/* Antes de mostrar o Pix: atualiza a lista de produtos e confere estoque e preço da sacola.
+   Se algo mudou, volta para a sacola com um aviso, antes de o cliente pagar. */
+async function checkBeforePayment(){
+  if(!CONFIG.appsScriptUrl) return true;
+  state.checking=true; renderPanel();
+  const prev=Object.fromEntries(PRODUCTS.map(p=>[p.id,{name:p.name,price:p.price}]));
+  const ok=await loadProducts({fresh:true});
+  state.checking=false;
+  if(!ok) return true;                       /* sem resposta agora: o script confere de novo ao receber o pedido */
+  const notes=reconcileCart(prev);
+  refreshBuyViews(); updateCount(); updateDeliveryTexts();
+  if(notes.length){ state.notice=notes.join(" "); go("cart"); return false; }
+  return true;
+}
+async function sendOrder(){
+  if(state.sending) return;
+  if(!state.receipt){ state.error="Anexe o comprovante do Pix para enviar o pedido."; renderPanel(); return; }
+  const t=totals(); if(!t.count) return;
+  const payload={
+    code:state.code, createdAt:new Date().toISOString(), website:"",
+    customer:{...state.form},
+    items:Object.entries(state.cart).map(([id,q])=>{const p=byId(id);return {id:p.id,name:p.name,qty:q,price:p.price};}),
+    subtotal:t.sub, delivery:t.delivery, total:t.total,
+    receipt:{name:state.receipt.name,type:state.receipt.type,base64:state.receipt.dataUrl.split(",")[1]}
+  };
+  state.sending=true; state.error=""; renderPanel();
+  try{
+    let res=null;
+    if(CONFIG.appsScriptUrl) res=await postOrder(payload);
+    else console.log("Modo de teste — pedido que seria enviado:",{...payload,receipt:{...payload.receipt,base64:"(omitido)"}});
+    state.doneCode=state.code; save("cs_last",{code:state.doneCode});
+    state.doneInfo={semEstoque:!!(res&&res.semEstoque),total:t.total};
+    state.cart={}; save("cs_cart",state.cart);
+    state.code=""; state.receipt=null; state.sending=false;
+    if(CONFIG.appsScriptUrl) loadProducts({fresh:true}).then(()=>{ renderChips(); refreshBuyViews(); });
+    refreshBuyViews(); updateCount(); go("done");
+  }catch(err){
+    state.sending=false;
+    if(err.known){                            /* o script recusou o pedido (ex.: produto saiu da loja) */
+      const prev=Object.fromEntries(PRODUCTS.map(p=>[p.id,{name:p.name,price:p.price}]));
+      await loadProducts({fresh:true});
+      const notes=reconcileCart(prev);
+      state.notice=[err.message,...notes,"Se você já fez o Pix, fale com a loja para resolvermos."].join(" ");
+      renderChips(); refreshBuyViews(); updateCount(); go("cart"); return;
+    }
+    state.error="Não foi possível enviar o pedido. Confira sua conexão e tente de novo. Seu comprovante continua anexado.";
+    renderPanel();
+  }
+}
+
+/* ---------- Rastreio do pedido ---------- */
+const TRACK_STEPS=[
+  {key:"aguardando",label:"Pedido recebido",text:"Recebemos seu pedido e estamos conferindo o pagamento."},
+  {key:"pago",label:"Pagamento confirmado",text:"Já vamos separar seus produtos."},
+  {key:"preparo",label:"Em preparo",text:"Seus produtos estão sendo separados com carinho."},
+  {key:"saiu",label:"Saiu para entrega",text:"Está a caminho do endereço informado."},
+  {key:"entregue",label:"Entregue",text:"Pedido entregue. Agradecemos a compra!"}
+];
+const CHECK_SVG='<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+function trackViews(){
+  const t=state.track;
+  if(!t.result){
+    return {
+      body:`<p class="muted" style="margin-top:0">Digite o código que você recebeu ao finalizar o pedido e o telefone usado na compra.</p>
+        <form id="trackForm" novalidate>
+          <label class="field">Código do pedido
+            <input name="code" required autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="CS260919AB12" value="${esc(t.code)}"></label>
+          <label class="field">Telefone com DDD
+            <input name="phone" type="tel" inputmode="tel" autocomplete="tel" value="${esc(t.phone)}"></label>
+          ${t.error?`<div class="error" role="alert">${esc(t.error)}</div>`:""}
+        </form>`,
+      foot:`<button class="btn btn-primary btn-block" type="submit" form="trackForm" ${t.loading?"disabled":""}>${t.loading?"Consultando…":"Consultar pedido"}</button>`
+    };
+  }
+  const r=t.result;
+  const cur=TRACK_STEPS.findIndex(s=>s.key===r.status);
+  const d=new Date(r.criadoEm);
+  const date=isNaN(d)?"":`<p class="muted small" style="margin:2px 0 0">Feito em ${d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"})}</p>`;
+  let status="";
+  if(r.status==="cancelado"){
+    status=`<div class="error" style="margin-top:14px"><strong>Este pedido foi cancelado.</strong> Se tiver alguma dúvida, entre em contato com a loja.</div>`;
+  }else if(r.status==="recusado"){
+    status=`<div class="error" style="margin-top:14px"><strong>Não conseguimos confirmar o pagamento.</strong> Confira o valor pago e envie o comprovante para a loja para liberarmos o pedido.</div>`;
+  }else{
+    status=`<ol class="timeline">`+TRACK_STEPS.map((s,i)=>{
+      const cls=i<cur?"is-done":i===cur?"is-now":"is-todo";
+      const sr=i<cur?" (concluído)":i===cur?" (etapa atual)":"";
+      return `<li class="${cls}"${i===cur?' aria-current="step"':""}>
+        <span class="dot">${i<cur?CHECK_SVG:""}</span>
+        <strong>${s.label}<span class="sr-only">${sr}</span></strong>
+        ${i===cur?`<p>${s.text}</p>`:""}
+      </li>`;}).join("")+`</ol>`;
+  }
+  const items=(r.itens||[]).map(l=>`<li>${esc(l)}</li>`).join("");
+  return {
+    body:`${t.error?`<div class="error" role="alert" style="margin-bottom:12px">${esc(t.error)}</div>`:""}
+      <h3 id="trackResult" class="track-title" tabindex="-1">Pedido ${esc(r.codigo)}</h3>${date}
+      ${status}
+      <h3 class="sec-title">Itens do pedido</h3>
+      <ul class="items">${items}</ul>
+      <div class="row"><span>Total</span><strong>${brl(r.total)}</strong></div>`,
+    foot:`<div class="foot-actions">
+        <button class="btn btn-quiet" type="button" data-act="track-reset">Consultar outro</button>
+        <button class="btn btn-primary" type="button" data-act="track-refresh" ${t.loading?"disabled":""}>${t.loading?"Atualizando…":"Atualizar"}</button>
+      </div>`
+  };
+}
+async function runTrack(){
+  const t=state.track;
+  t.loading=true; t.error=""; renderPanel();
+  try{
+    if(!CONFIG.appsScriptUrl) throw Object.assign(new Error("O rastreio ainda não está ligado nesta loja."),{known:true});
+    const r=await fetch(CONFIG.appsScriptUrl,{method:"POST",body:JSON.stringify({action:"track",code:t.code,phone:t.phone})});
+    const j=await r.json();
+    if(!j||!j.ok) throw Object.assign(new Error((j&&j.error)||"Não foi possível consultar o pedido."),{known:true});
+    t.result=j; save("cs_last",{code:j.codigo});
+  }catch(err){
+    t.error=err.known?err.message:"Não foi possível consultar agora. Confira sua conexão e tente de novo.";
+  }
+  t.loading=false; renderPanel();
+  const h=$("#trackResult"); if(h) h.focus();
+}
+
+/* ---------- Eventos ---------- */
+document.addEventListener("click",async e=>{
+  if(e.target.id==="overlay"){ closePanel(); return; }
+  const el=e.target.closest("[data-act]"); if(!el) return;
+  const act=el.dataset.act, id=el.dataset.id;
+  switch(act){
+    case "add": setQty(id,1); toast("Adicionado à sacola"); break;
+    case "inc": setQty(id,qty(id)+1); break;
+    case "dec": setQty(id,qty(id)-1); break;
+    case "remove": setQty(id,0); break;
+    case "cat": state.filter=el.dataset.cat; renderChips(); renderGrid(); break;
+    case "clear": state.filter="Todos"; state.q=""; $("#q").value=""; renderChips(); renderGrid(); break;
+    case "open-cart": openPanel("cart"); break;
+    case "close": closePanel(); break;
+    case "to-details": go("details"); break;
+    case "back-cart": go("cart"); break;
+    case "back-details": go("details"); break;
+    case "send": sendOrder(); break;
+    case "reload": state.loadError=false; renderGrid(); afterLoad(await loadProducts()); break;
+    case "gal-prev": galleryGo(galleryIndex()-1); break;
+    case "gal-next": galleryGo(galleryIndex()+1); break;
+    case "gal-go": galleryGo(Number(el.dataset.i)); break;
+    case "share": shareProduct(id); break;
+    case "back-shop": e.preventDefault(); if(state.cameFromShop) history.back(); else location.hash="#/"; break;
+    case "open-track": {
+      const last=read("cs_last",{});
+      state.track={code:last.code||"",phone:state.form.phone||"",loading:false,error:"",result:null};
+      openPanel("track"); break;
+    }
+    case "track-this":
+      state.track={code:state.doneCode,phone:state.form.phone,loading:false,error:"",result:null};
+      go("track"); runTrack(); break;
+    case "track-reset": state.track.result=null; state.track.error=""; renderPanel(); break;
+    case "track-refresh": runTrack(); break;
+    case "copy": toast(await copyText($("#pixCode").value)?"Código Pix copiado":"Não foi possível copiar. Selecione o código e copie."); break;
+  }
+});
+document.addEventListener("submit",e=>{
+  if(e.target.id==="trackForm"){
+    e.preventDefault();
+    const d=Object.fromEntries(new FormData(e.target).entries());
+    const code=(d.code||"").trim().toUpperCase(), phone=(d.phone||"").trim();
+    Object.assign(state.track,{code,phone});
+    if(!code||phone.replace(/\D/g,"").length<10){
+      state.track.error="Informe o código do pedido e o telefone com DDD."; renderPanel(); return;
+    }
+    runTrack(); return;
+  }
+  if(e.target.id!=="detailsForm") return;
+  e.preventDefault();
+  const f=e.target, d=Object.fromEntries(new FormData(f).entries());
+  const digits=(d.phone||"").replace(/\D/g,"");
+  let msg="";
+  if(!d.name.trim()||!d.street.trim()||!d.district.trim()||!d.phone.trim()) msg="Preencha nome, telefone, rua e bairro.";
+  else if(digits.length<10) msg="Informe o telefone com DDD, por exemplo (11) 91234-5678.";
+  else if((d.email||"").trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email.trim())) msg="Confira o e-mail: parece que falta alguma parte, como o @ ou o .com.";
+  if(msg){ $("#formError").innerHTML=`<div class="error">${msg}</div>`; return; }
+  if(d.website){ return; } /* campo escondido preenchido = robô */
+  state.form={name:d.name.trim(),phone:d.phone.trim(),email:(d.email||"").trim(),street:d.street.trim(),district:d.district.trim(),complement:(d.complement||"").trim(),notes:(d.notes||"").trim()};
+  save("cs_customer",state.form);
+  checkBeforePayment().then(ok=>{ if(ok) go("payment"); });
+});
+document.addEventListener("change",e=>{
+  if(e.target.id==="receipt" && e.target.files[0]) handleReceipt(e.target.files[0]);
+});
+$("#q").addEventListener("input",e=>{ state.q=e.target.value; renderGrid(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&state.open) closePanel(); });
+
+/* ---------- Início ---------- */
+if(CONFIG.whatsapp){
+  $("#contactLine").innerHTML=`<a class="link-btn" href="https://wa.me/${esc(CONFIG.whatsapp)}">Falar com a loja</a>`;
+}
+window.addEventListener("hashchange",applyRoute);
+async function afterLoad(ok){
+  state.loadError=!ok;
+  if(ok){ const notes=reconcileCart(null); if(notes.length) toast("Atualizamos sua sacola: alguns itens mudaram."); }
+  renderChips(); updateCount(); updateDeliveryTexts(); renderShopNote();
+  if(state.route.type==="product"){ renderProduct(state.route.id); bindGallery(); const h=$("#pdpTitle"); if(h) h.focus({preventScroll:true}); }
+  else renderGrid();
+}
+async function boot(){
+  renderChips(); renderGrid(); updateCount(); applyRoute();
+  afterLoad(await loadProducts());
+}
+boot();
+</script>
+</body>
+</html>
